@@ -150,4 +150,38 @@ class Api extends REST_Controller
 			$this->response(array('status' => 'not found'), 404);
 		}
 	}
+
+	// API Banner
+
+	function banner_get()
+	{
+		$id = $this->get('id_banner');
+
+		$this->db->select('
+			banner.id_banner,
+			banner.id_properti,
+			banner.type_banner,
+			banner.jenis_penawaran,
+			banner.foto_banner,
+			banner.created,
+			properti.judul_properti,
+			properti.id_properti,
+			properti.jenis_penawaran,
+		');
+		$this->db->from('banner');
+		$this->db->join('properti', 'properti.id_properti = banner.id_properti', 'left');
+
+		if ($id) {
+			$this->db->where('banner.id_banner', $id);
+		}
+
+		$this->db->order_by("banner.id_banner", "DESC");
+		$banner = $this->db->get()->result();
+
+		if ($banner) {
+			$this->response($banner, 200);
+		} else {
+			$this->response(array('status' => 'not found'), 404);
+		}
+	}
 }
