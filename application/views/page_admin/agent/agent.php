@@ -1,5 +1,33 @@
 <style>
-/* css loader */
+/* Placeholder for title (name) */
+.title-placeholder {
+    width: 150px;
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+/* Placeholder for subtitle (position) */
+.sub-title-placeholder {
+    width: 100px;
+    height: 15px;
+    margin-bottom: 10px;
+}
+
+/* Placeholder for other details (location, contact) */
+.details-placeholder {
+    width: 120px;
+    height: 15px;
+    margin-bottom: 10px;
+}
+
+/* Placeholder for image (profile picture) */
+.image-placeholder {
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+}
+
+/* Placeholder animation */
 @-webkit-keyframes placeHolderShimmer {
     0% {
         background-position: -468px 0;
@@ -38,11 +66,11 @@
     background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
     -webkit-background-size: 800px 104px;
     background-size: 800px 104px;
-    height: inherit;
     position: relative;
     border-radius: 5px;
 }
 
+/* Placeholder Container */
 .post_data {
     padding: 16px;
     border: 1px solid #f0f0f0;
@@ -54,74 +82,22 @@
     align-items: center;
 }
 
-/* css halaman data properti */
-
-.image-placeholder {
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-    margin-right: 16px;
+.card-body-custom {
+    margin-top: -10px;
 }
 
-.details-placeholder {
-    width: calc(100% - 120px);
+.badge-small {
+    font-size: 9px;
+    padding: 5px 4px;
+    height: auto;
 }
 
-.title-placeholder {
-    width: 70%;
-    height: 20px;
-    margin-bottom: 8px;
+.list {
+    font-size: 12px;
 }
 
-.sub-title-placeholder {
-    width: 50%;
-    height: 20px;
-    margin-bottom: 8px;
-}
-
-.price-placeholder {
-    width: 40%;
-    height: 30px;
-    margin-bottom: 8px;
-}
-
-
-.image-pro {
-    flex: 0 0 auto;
-    width: 29%;
-    margin-left: inherit;
-}
-
-.harga {
-    color: #1A44B2;
-    font-weight: bold;
-}
-
-.unit {
-    color: black;
-    font-weight: bold;
-}
-
-.tayang {
-    font-size: smaller;
-}
-
-.pagin {
-    position: relative;
-}
-
-.desk {
-    flex: 1 1 auto;
-    padding: 0.1rem 0.1rem;
-}
-
-.tombol {
-    flex: 0 0 auto;
-    width: 96px;
-}
-
-.tombol button:hover .icon-img {
-    filter: brightness(0) invert(1);
+img {
+    filter: drop-shadow(2px 0px 56px);
 }
 
 /* css inputan */
@@ -194,130 +170,86 @@ textarea:focus+label {
     transform: translateY(-20px);
 }
 
-.dropzone .dz-preview {
+
+/* hover foto keluar tombol */
+.card {
     position: relative;
 }
 
-.dropzone .dz-preview .btn-remove {
-    position: absolute;
-    top: 98px;
-    right: 30px;
+.card .hover-buttons {
     display: none;
-    z-index: 10;
-    border-radius: 23%;
+    position: absolute;
+    top: 10px;
+    /* Sesuaikan dengan posisi yang diinginkan */
+    right: 10px;
+    /* Sesuaikan dengan posisi yang diinginkan */
+    z-index: 2;
 }
 
-.dropzone .dz-preview:hover .btn-remove {
-    display: block;
+.card:hover .hover-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* kode untuk menampilkan tombol lihat detail properti */
-.image-pro {
+.card .hover-buttons button {
+    width: 25px;
+    height: 25px;
+    font-size: 10px;
+    padding: 0px;
+}
+
+.action-buttons .btn {
+    margin-right: 10px;
+}
+
+.action-buttons .btn:last-child {
+    margin-right: 0;
+}
+
+.listing-label {
+    margin-top: 38px;
+}
+
+.listing-text {
+    font-size: 10px;
+    color: #1a44b2;
+    font-weight: 500;
+}
+
+.alert {
     position: relative;
-    overflow: hidden;
 }
 
-.image-pro img {
-    display: block;
-    width: 100%;
-    height: auto;
+#profil-preview {
+    margin-bottom: -15px;
 }
 
-.btn-view {
-    display: none;
+#change-foto {
     position: absolute;
-    top: 39%;
-    left: 40%;
-    transform: translate(-4%, -9%);
-    padding: 1px 6px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    border-radius: 10px;
-    text-decoration: none;
-    font-size: 11px;
-}
-
-.image-pro:hover .btn-view {
-    display: block;
-}
-
-.ribbon {
-    width: 141px;
-    height: 73px;
-    overflow: hidden;
-    position: absolute;
-}
-
-.ribbon::before,
-.ribbon::after {
-    position: absolute;
-    z-index: -1;
-    content: "";
-    display: block;
-    border: 5px solid #2980b9;
-}
-
-.ribbon span {
-    position: absolute;
-    display: block;
-    width: 297px;
-    padding: 5px 0;
-    background-color: #1A44B2;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    color: #fff;
-    font: 600 11px/1 "Lato", sans-serif;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-    text-transform: uppercase;
-    text-align: center;
-}
-
-/* top left*/
-.ribbon-top-left {
-    top: -3px;
-    left: 4px;
-}
-
-.ribbon-top-left::before,
-.ribbon-top-left::after {
-    border-top-color: transparent;
-    border-left-color: transparent;
-}
-
-.ribbon-top-left::before {
-    top: 0;
-    right: 0;
-}
-
-.ribbon-top-left::after {
-    bottom: 0;
-    left: 0;
-}
-
-.ribbon-top-left span {
-    right: -44px;
-    top: 18px;
-    transform: rotate(-40deg);
+    bottom: 140px;
+    right: 9px;
+    margin: 0px;
 }
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="demo-inline-spacing mb-3">
         <button type="button" class="btn btn-sm btn-primary rounded-2" data-bs-toggle="modal"
-            data-bs-target="#add-properti">Tambah Properti</button>
+            data-bs-target="#add-agent">Tambah Agent</button>
     </div>
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h5 class="mb-0">Daftar Properti</h5>
+            <h5 class="mb-0">Daftar Agent</h5>
         </div>
         <form class="d-flex" style="width: 200px;">
             <div class="input-group">
                 <span class="input-group-text"><i class="tf-icons bx bx-search"></i></span>
-                <input type="text" id="search-properti" class="form-control" placeholder="Search..." />
+                <input type="text" id="search-agent" class="form-control" placeholder="Search..." />
             </div>
         </form>
     </div>
-
-    <div class="row mb-0" id="load_data">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5" id="load_data">
     </div>
     <div id="load_data_message"></div>
     <!-- Pagination -->

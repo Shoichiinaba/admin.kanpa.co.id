@@ -437,8 +437,6 @@ $(document).ready(function() {
     reloadVideoData();
 });
 
-
-
 // kode edit data reel
 $(document).ready(function() {
 

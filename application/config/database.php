@@ -12,10 +12,13 @@ $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	// Offline development
-	'username' => 'root',
-	'password' => '',
+	// 'username' => 'root',
+	// 'password' => '',
 
-	// Online Production
+	 // online development (productions)
+	 'username' => 'kina3126_mp_kanpa',
+	 'password' => 'kanpa2020',
+
 	'database' => 'kina3126_mp_kanpa.co.id',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

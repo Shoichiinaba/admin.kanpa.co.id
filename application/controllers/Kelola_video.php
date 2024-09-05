@@ -45,6 +45,7 @@ class Kelola_video extends CI_Controller
         $deskripsi      = $this->input->post('deskripsi');
         $video          = $this->input->post('video');
 
+
         // Validasi input
         if (empty($id_properti) || empty($sosial_media) || empty($deskripsi)) {
             echo json_encode(['status' => 'error', 'message' => 'Semua field harus diisi']);
@@ -62,7 +63,8 @@ class Kelola_video extends CI_Controller
             'judul_reels' => $judul,
             'sosial_media' => $sosial_media,
             'deskripsi' => $deskripsi,
-            'video' => $video
+            'video' => $video,
+            'uploaded' => date('d-m-Y')
         );
 
         // Simpan data reels
@@ -152,97 +154,97 @@ class Kelola_video extends CI_Controller
     }
 
     public function simpan_ubah_reels()
-{
-    $config['upload_path'] = './upload/videos/';
-    $config['allowed_types'] = 'mp4|mov|avi';
-    $config['max_size'] = 102400;
-    $config['encrypt_name'] = TRUE;
+    {
+        $config['upload_path'] = './upload/videos/';
+        $config['allowed_types'] = 'mp4|mov|avi';
+        $config['max_size'] = 102400;
+        $config['encrypt_name'] = TRUE;
 
-    $this->load->library('upload', $config);
+        $this->load->library('upload', $config);
 
-    $id_reel = $this->input->post('id_reel');
+        $id_reel = $this->input->post('id_reel');
 
-    if ($id_reel) {
-        $existing_reel = $this->Reels_model->get_reel_by_id($id_reel);
-        $old_video = $existing_reel->video;
-    }
-
-    // Coba upload video baru
-    if ($this->upload->do_upload('video')) {
-        $upload_data = $this->upload->data();
-        $video_name = $upload_data['file_name'];
-
-        // Hapus video lama dari direktori jika ada
-        if (!empty($old_video) && file_exists('./upload/videos/' . $old_video)) {
-            unlink('./upload/videos/' . $old_video);
+        if ($id_reel) {
+            $existing_reel = $this->Reels_model->get_reel_by_id($id_reel);
+            $old_video = $existing_reel->video;
         }
-    } else {
-        if (empty($_FILES['video']['name'])) {
-            // Jika tidak ada video baru yang diunggah, gunakan video lama
-            $video_name = isset($old_video) ? $old_video : '';
+
+        // Coba upload video baru
+        if ($this->upload->do_upload('video')) {
+            $upload_data = $this->upload->data();
+            $video_name = $upload_data['file_name'];
+
+            // Hapus video lama dari direktori jika ada
+            if (!empty($old_video) && file_exists('./upload/videos/' . $old_video)) {
+                unlink('./upload/videos/' . $old_video);
+            }
         } else {
-            // Jika ada error selain tidak ada file yang dipilih
+            if (empty($_FILES['video']['name'])) {
+                // Jika tidak ada video baru yang diunggah, gunakan video lama
+                $video_name = isset($old_video) ? $old_video : '';
+            } else {
+                // Jika ada error selain tidak ada file yang dipilih
+                $response = [
+                    'status' => 'error',
+                    'message' => $this->upload->display_errors()
+                ];
+                echo json_encode($response);
+                return;
+            }
+        }
+
+        // Data yang akan disimpan
+        $data = [
+            'id_properti' => $this->input->post('id_properti'),
+            'judul_reels' => $this->input->post('ubah-judul'),
+            'video' => $video_name,
+            'sosial_media' => $this->input->post('ubah-sosmed'),
+            'deskripsi' => $this->input->post('ubah-deskripsi'),
+        ];
+
+        if ($id_reel) {
+            // Update data jika id_reel ada
+            $this->Reels_model->update_reel($id_reel, $data);
+            $response = [
+                'status' => 'success',
+                'message' => 'Data berhasil diperbarui.'
+            ];
+        } else {
             $response = [
                 'status' => 'error',
-                'message' => $this->upload->display_errors()
+                'message' => 'ID Reel tidak ditemukan.'
             ];
-            echo json_encode($response);
-            return;
-        }
-    }
-
-    // Data yang akan disimpan
-    $data = [
-        'id_properti' => $this->input->post('id_properti'),
-        'judul_reels' => $this->input->post('ubah-judul'),
-        'video' => $video_name,
-        'sosial_media' => $this->input->post('ubah-sosmed'),
-        'deskripsi' => $this->input->post('ubah-deskripsi'),
-    ];
-
-    if ($id_reel) {
-        // Update data jika id_reel ada
-        $this->Reels_model->update_reel($id_reel, $data);
-        $response = [
-            'status' => 'success',
-            'message' => 'Data berhasil diperbarui.'
-        ];
-    } else {
-        $response = [
-            'status' => 'error',
-            'message' => 'ID Reel tidak ditemukan.'
-        ];
-    }
-
-    echo json_encode($response);
-}
-
-// kode hapus reels
-public function hapus_reel()
-{
-    $id_reel = $this->input->post('id_reel');
-
-    $reel = $this->Reels_model->get_reel_by_id($id_reel);
-    if ($reel) {
-        $video_name = $reel->video;
-
-        if (!empty($video_name) && file_exists('./upload/videos/' . $video_name)) {
-            unlink('./upload/videos/' . $video_name);
         }
 
-        $this->Reels_model->delete_reel($id_reel);
-
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Data berhasil dihapus.'
-        ]);
-    } else {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'ID Reel tidak ditemukan.'
-        ]);
+        echo json_encode($response);
     }
-}
+
+    // kode hapus reels
+    public function hapus_reel()
+    {
+        $id_reel = $this->input->post('id_reel');
+
+        $reel = $this->Reels_model->get_reel_by_id($id_reel);
+        if ($reel) {
+            $video_name = $reel->video;
+
+            if (!empty($video_name) && file_exists('./upload/videos/' . $video_name)) {
+                unlink('./upload/videos/' . $video_name);
+            }
+
+            $this->Reels_model->delete_reel($id_reel);
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Data berhasil dihapus.'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'ID Reel tidak ditemukan.'
+            ]);
+        }
+    }
 
 
 }

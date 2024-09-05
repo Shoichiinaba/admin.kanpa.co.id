@@ -54,75 +54,34 @@
     align-items: center;
 }
 
-/* css halaman data properti */
-
-.image-placeholder {
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-    margin-right: 16px;
+/* untuk mengatur banner */
+.image-split {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 120px;
+    height: 90px;
+    padding: 0px;
 }
 
-.details-placeholder {
-    width: calc(100% - 120px);
+.image-full {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 226px;
+    height: 90px;
+    padding: 0px;
 }
 
-.title-placeholder {
-    width: 70%;
-    height: 20px;
-    margin-bottom: 8px;
-}
-
-.sub-title-placeholder {
-    width: 50%;
-    height: 20px;
-    margin-bottom: 8px;
-}
-
-.price-placeholder {
-    width: 40%;
-    height: 30px;
-    margin-bottom: 8px;
+.image-pro img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
 
 
-.image-pro {
-    flex: 0 0 auto;
-    width: 29%;
-    margin-left: inherit;
-}
-
-.harga {
-    color: #1A44B2;
-    font-weight: bold;
-}
-
-.unit {
-    color: black;
-    font-weight: bold;
-}
-
-.tayang {
-    font-size: smaller;
-}
-
-.pagin {
-    position: relative;
-}
-
-.desk {
-    flex: 1 1 auto;
-    padding: 0.1rem 0.1rem;
-}
-
-.tombol {
-    flex: 0 0 auto;
-    width: 96px;
-}
-
-.tombol button:hover .icon-img {
-    filter: brightness(0) invert(1);
-}
 
 /* css inputan */
 .input-wrapper {
@@ -194,56 +153,9 @@ textarea:focus+label {
     transform: translateY(-20px);
 }
 
-.dropzone .dz-preview {
-    position: relative;
-}
-
-.dropzone .dz-preview .btn-remove {
-    position: absolute;
-    top: 98px;
-    right: 30px;
-    display: none;
-    z-index: 10;
-    border-radius: 23%;
-}
-
-.dropzone .dz-preview:hover .btn-remove {
-    display: block;
-}
-
-/* kode untuk menampilkan tombol lihat detail properti */
-.image-pro {
-    position: relative;
-    overflow: hidden;
-}
-
-.image-pro img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-.btn-view {
-    display: none;
-    position: absolute;
-    top: 39%;
-    left: 40%;
-    transform: translate(-4%, -9%);
-    padding: 1px 6px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    border-radius: 10px;
-    text-decoration: none;
-    font-size: 11px;
-}
-
-.image-pro:hover .btn-view {
-    display: block;
-}
-
 .ribbon {
-    width: 141px;
-    height: 73px;
+    width: 62px;
+    height: 54px;
     overflow: hidden;
     position: absolute;
 }
@@ -260,7 +172,7 @@ textarea:focus+label {
 .ribbon span {
     position: absolute;
     display: block;
-    width: 297px;
+    width: 246px;
     padding: 5px 0;
     background-color: #1A44B2;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
@@ -273,8 +185,8 @@ textarea:focus+label {
 
 /* top left*/
 .ribbon-top-left {
-    top: -3px;
-    left: 4px;
+    top: -6px;
+    left: -6px;
 }
 
 .ribbon-top-left::before,
@@ -294,30 +206,66 @@ textarea:focus+label {
 }
 
 .ribbon-top-left span {
-    right: -44px;
-    top: 18px;
+    right: -79px;
+    top: 16px;
     transform: rotate(-40deg);
+}
+
+/* mengatur preview ubah */
+.alert {
+    position: relative;
+}
+
+#banner-preview {
+    width: 33%;
+    max-width: 300px;
+    height: auto;
+    overflow: hidden;
+    margin-top: 10px;
+    margin-left: 225px;
+}
+
+#banner-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#change-foto {
+    position: sticky;
+    bottom: 209px;
+    right: 365px;
+    margin: 0px;
+}
+
+
+.modal-backdrop {
+    z-index: 1040 !important;
+}
+
+.swal2-container.swal2-front {
+    z-index: 1070 !important;
 }
 </style>
 
+
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="demo-inline-spacing mb-3">
-        <button type="button" class="btn btn-sm btn-primary rounded-2" data-bs-toggle="modal"
-            data-bs-target="#add-properti">Tambah Properti</button>
+        <button type="button" class="btn btn-sm btn-primary rounded-2 shadow-lg" data-bs-toggle="modal"
+            data-bs-target="#add-banner">Upload Banner</button>
     </div>
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h5 class="mb-0">Daftar Properti</h5>
+            <h5 class="mb-0">Daftar banner</h5>
         </div>
-        <form class="d-flex" style="width: 200px;">
+        <form class="d-flex shadow-lg" style="width: 200px;">
             <div class="input-group">
                 <span class="input-group-text"><i class="tf-icons bx bx-search"></i></span>
-                <input type="text" id="search-properti" class="form-control" placeholder="Search..." />
+                <input type="text" id="search-banner" class="form-control" placeholder="Search..." />
             </div>
         </form>
     </div>
-
-    <div class="row mb-0" id="load_data">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-3 mt-3" id="load_data">
     </div>
     <div id="load_data_message"></div>
     <!-- Pagination -->

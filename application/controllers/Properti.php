@@ -46,10 +46,11 @@ class Properti extends CI_Controller
                                 <div class="row d-none d-md-flex align-items-center p-2">
                                     <div class="card position-relative">
                                         <div class="row">
-                                            <div class="image-pro">
+                                            <div class="image-pro position-relative">
+                                            <div class="ribbon ribbon-top-left"><span>' . $prop->jenis_penawaran . '</span></div>
                                                 <img class="card-img card-img-left" src="' . base_url('upload/gambar_properti/' . $prop->gambar) . '"
                                                     alt="Card image" />
-                                                    <a href="' . base_url('properti/detail/' . $prop->id_properti) . '" class="btn btn-primary btn-view"><i class="menu-icon tf-icons bx bx-bot"></i>Lihat</a>
+                                                <a href="' . base_url('Properti/detail/' . $prop->id_properti) . '" class="btn btn-primary btn-view"><i class="menu-icon tf-icons bx bx-bot"></i>Lihat</a>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="desk pt-2 pb-1">
@@ -60,8 +61,6 @@ class Properti extends CI_Controller
                                                             </p>
                                                         </div>
                                                     </div>';
-
-                                                    // Menambahkan logika untuk menampilkan harga tanpa desimal jika genap
                                                     $output .= '<h3 class="harga text-primary mb-2">Rp. ' . (floor($prop->harga) == $prop->harga ? number_format($prop->harga, 0, ',', '.') : number_format($prop->harga, 1, ',', '.')) . ' ' . $prop->satuan . '</h3>';
 
                                                     $output .= '
@@ -160,9 +159,12 @@ class Properti extends CI_Controller
             return;
         }
 
+        $jenis_penawaran = $this->input->post('penawaran') ? $this->input->post('penawaran') : 'Dijual';
+
         $data_properti = [
             'id_kota' => $id_kota,
             'id_type' => $id_type,
+            'jenis_penawaran' => $jenis_penawaran,
             'judul_properti' => $this->input->post('judul_properti'),
             'alamat' => $this->input->post('alamat'),
             'lokasi' => $this->input->post('lokasi'),
@@ -286,7 +288,7 @@ class Properti extends CI_Controller
         $id_properti = $this->uri->segment(3);
         $data['tittle']         = 'kanpa.co.id | Detail Properti';
         $data['detail']         = $this->Properti_model->get_properti_det($id_properti);
-        $data['promo']         = $this->Properti_model->get_promo($id_properti);
+        $data['promo']          = $this->Properti_model->get_promo($id_properti);
         $data['content']        = 'page_admin/detail_properti/detail';
         $data['script']         = 'page_admin/detail_properti/detail_js';
         $this->load->view($this->template, $data);

@@ -30,22 +30,34 @@
                             <input type="text" name="id_type" class="form-control">
                             <input type="text" name="id_nama" class="form-control">
                         </div>
-                        <div class="input-wrapper">
-                            <input class="form-control" list="datalistOptions" id="exampleDataList"
-                                placeholder="Ketik nama kota...">
-                            <label for="exampleDataList" class="label-in">Pilih Kota</label>
+                        <div class="row ">
+                            <div class="input-wrapper col-6" id="penawaran">
+                                <input class="form-control" list="data-penawaran" name="penawaran"
+                                    placeholder="Pilih jenis Penawaran..." />
+                                <label for="penawaran" class="label-in">Pilih Penawaran</label>
 
-                            <datalist id="datalistOptions">
-                                <?php foreach ($kota as $kotas) : ?>
-                                <option data-id="<?php echo $kotas->id_kota; ?>"
-                                    data-provinsi="<?php echo $kotas->provinsi_id; ?>"
-                                    value="<?php echo $kotas->nama_kota; ?>">
-                                </option>
-                                <?php endforeach; ?>
-                            </datalist>
+                                <datalist id="data-penawaran">
+                                    <option value="Dijual"></option>
+                                    <option value="Disewakan"></option>
+                                </datalist>
+                            </div>
+                            <div class="input-wrapper col-6" id="kota-list">
+                                <input class="form-control" list="datalistOptions" id="exampleDataList"
+                                    placeholder="Ketik nama kota...">
+                                <label for="exampleDataList" class="label-in">Pilih Kota</label>
 
-                            <input type="hidden" name="id_kota" id="id-kota">
-                            <input type="hidden" name="id_provinsi" id="id-provinsi">
+                                <datalist id="datalistOptions">
+                                    <?php foreach ($kota as $kotas) : ?>
+                                    <option data-id="<?php echo $kotas->id_kota; ?>"
+                                        data-provinsi="<?php echo $kotas->provinsi_id; ?>"
+                                        value="<?php echo $kotas->nama_kota; ?>">
+                                    </option>
+                                    <?php endforeach; ?>
+                                </datalist>
+
+                                <input type="hidden" name="id_kota" id="id-kota">
+                                <input type="hidden" name="id_provinsi" id="id-provinsi">
+                            </div>
                         </div>
                         <div class="input-wrapper mt-3">
                             <input type="text" name="judul_properti" class="form-control" required>
@@ -355,6 +367,7 @@ var myDropzone = new Dropzone("#dropzone", {
             myDropzone.options.params = {
                 id_kota: id_kota,
                 id_type: id_type,
+                penawaran: formData.get('penawaran'),
                 judul_properti: formData.get('judul_properti'),
                 alamat: formData.get('alamat'),
                 lokasi: formData.get('lokasi'),
@@ -438,6 +451,7 @@ var myDropzone = new Dropzone("#dropzone", {
 $(".type-button").click(function() {
     var selectedType = $(this).data('type');
     var selectedId = $(this).data('id');
+
     $("input[name='id_type']").val(selectedType);
     $("input[name='id_nama']").val(selectedId);
 
@@ -445,10 +459,19 @@ $(".type-button").click(function() {
 
     if (selectedType === "Perumahan" || selectedType === "Apartment") {
         $("#fasilitas-section").show();
+        $("#penawaran").hide();
     } else {
         $("#fasilitas-section").hide();
+        $("#penawaran").show();
+    }
+
+    if (selectedType === "Perumahan") {
+        $("#kota-list").removeClass("col-6").addClass("col-12");
+    } else {
+        $("#kota-list").removeClass("col-12").addClass("col-6");
     }
 });
+
 
 $('#data-agent').on('input', function() {
     var inputValagen = $(this).val();
