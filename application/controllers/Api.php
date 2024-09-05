@@ -151,7 +151,7 @@ class Api extends REST_Controller
 		}
 	}
 
-	// API Banner
+	///// API Banner
 
 	function banner_get()
 	{
