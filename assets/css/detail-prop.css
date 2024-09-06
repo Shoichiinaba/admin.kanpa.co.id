@@ -286,6 +286,9 @@ text-center {
     font-size: 10px;
     text-align: center;
 }
+.ubah-content{
+    font-size: 10px;
+}
 
 .demo-inline-spacing .list-unstyled {
     display: flex;

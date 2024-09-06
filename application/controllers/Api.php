@@ -150,4 +150,80 @@ class Api extends REST_Controller
 			$this->response(array('status' => 'not found'), 404);
 		}
 	}
+
+	// API Banner
+
+	function banner_get()
+	{
+		$id = $this->get('id_banner');
+
+		$this->db->select('
+			banner.id_banner,
+			banner.id_properti,
+			banner.type_banner,
+			banner.jenis_penawaran,
+			banner.foto_banner,
+			banner.created,
+			properti.judul_properti,
+			properti.id_properti,
+			properti.jenis_penawaran,
+		');
+		$this->db->from('banner');
+		$this->db->join('properti', 'properti.id_properti = banner.id_properti', 'left');
+
+		if ($id) {
+			$this->db->where('banner.id_banner', $id);
+		}
+
+		$this->db->order_by("banner.id_banner", "DESC");
+		$banner = $this->db->get()->result();
+
+		if ($banner) {
+			$this->response($banner, 200);
+		} else {
+			$this->response(array('status' => 'not found'), 404);
+		}
+	}
+
+	// API AGENCY
+	function agency_get()
+	{
+		$id = $this->get('id_agency');
+
+		$this->db->select('
+			agency.id_agency,
+			agency.nama_agent,
+			agency.position,
+			agency.alamat,
+			agency.no_tlp,
+			agency.email,
+			agency.foto_profil,
+			agency.created,
+			COUNT(listing.id_listing) as total_listing,
+			GROUP_CONCAT(properti.judul_properti) as nama_properti
+		');
+		$this->db->from('agency');
+		$this->db->join('listing', 'listing.id_agency = agency.id_agency', 'left');
+		$this->db->join('properti', 'properti.id_properti = listing.id_properti', 'left');
+
+		if ($id) {
+			$this->db->where('agency.id_agency', $id);
+		}
+
+		$this->db->group_by('agency.id_agency');
+		$this->db->order_by("agency.id_agency", "ASC");
+
+		$agent = $this->db->get()->result();
+
+		foreach ($agent as &$data) {
+			$data->nama_properti = $data->nama_properti ? explode(',', $data->nama_properti) : [];
+		}
+
+		if ($agent) {
+			$this->response($agent, 200);
+		} else {
+			$this->response(array('status' => 'not found'), 404);
+		}
+	}
+
 }

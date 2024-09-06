@@ -66,8 +66,8 @@ class Kelola_banner extends CI_Controller
                 $output .= '</div>';
                 $output .= '</div>';
 
-
-                $output .= '<h3 class="harga text-primary mb-2">' . $ban->judul_properti . '</h3>';
+                $output .= '<h3 class="harga text-primary mb-2 d-inline-block">' . $ban->judul_properti . '</h3>';
+                $output .= '<span class="badge bg-label-primary ms-2 d-inline-block shadow-lg">' . $ban->luas_tanah . '/' . $ban->luas_bangunan . '</span>';
                 $output .= '</div>';
                 $output .= '</div>';
                 $output .= '</div>';

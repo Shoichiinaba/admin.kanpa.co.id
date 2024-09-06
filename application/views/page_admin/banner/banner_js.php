@@ -88,7 +88,7 @@
                                 <datalist id="datalistOptions">
                                     <?php foreach ($prop_select as $prop) : ?>
                                     <option data-id="<?php echo $prop->id_properti; ?>"
-                                        value="<?php echo $prop->judul_properti; ?>">
+                                        value="<?php echo $prop->judul_properti; ?> (<?php echo $prop->luas_tanah; ?>/<?php echo $prop->luas_bangunan; ?>)">
                                     </option>
                                     <?php endforeach; ?>
                                 </datalist>

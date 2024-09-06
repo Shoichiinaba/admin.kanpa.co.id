@@ -299,7 +299,7 @@
                                 <?php endforeach; ?>
                                 <div class="demo-inline-spacing">
                                     <button type="button"
-                                        class="btn btn-sm btn-outline-success rounded-3 btn-edit-promo"
+                                        class="btn btn-sm btn-outline-success rounded-2 btn-edit-promo"
                                         data-id="<?= $p->id_promo; ?>">Edit Promo</button>
                                 </div>
                                 <?php endif; ?>
@@ -310,7 +310,8 @@
             </div>
             <div class="col-md-2 col-lg-1 col-xl-1 col-sm-12 p-0 m-0">
                 <div class="demo-inline-spacing p-0 m-0">
-                    <button type="button" class="btn btn-sm btn-success p-1 rounded-2">Ubah Content</button>
+                    <button type="button" class="btn btn-sm btn-success p-0 rounded-1">Ubah
+                        Content</button>
                 </div>
             </div>
         </div>
