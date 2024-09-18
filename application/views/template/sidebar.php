@@ -1,7 +1,7 @@
 <!-- Menu -->
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-        <a href="index.html" class="app-brand-link">
+        <a href="<?php echo site_url('Dashboard'); ?>" class="app-brand-link">
             <span class="app-brand-logo demo">
                 <img src="<?= base_url('assets'); ?>/img/logo/logo.png" />
             </span>
@@ -49,6 +49,20 @@
             <a href="<?php echo site_url('Kelola_banner'); ?>" class="menu-link">
                 <i class='menu-icon tf-icons bx bx-landscape'></i>
                 <div data-i18n="Analytics">Kelola Banner</div>
+            </a>
+        </li>
+
+        <li class="menu-item <?php echo ($this->uri->segment(1) == 'Api_keys') ? 'active' : ''; ?>">
+            <a href="<?php echo site_url('Api_keys'); ?>" class="menu-link">
+                <i class='menu-icon tf-icons bx bx-key'></i>
+                <div data-i18n="Analytics">Buat API Key</div>
+            </a>
+        </li>
+
+        <li class="menu-item <?php echo ($this->uri->segment(1) == 'Maps') ? 'active' : ''; ?>">
+            <a href="<?php echo site_url('Maps'); ?>" class="menu-link">
+                <i class='menu-icon tf-icons bx bx-landscape'></i>
+                <div data-i18n="Analytics">Tes mapAPI</div>
             </a>
         </li>
     </ul>

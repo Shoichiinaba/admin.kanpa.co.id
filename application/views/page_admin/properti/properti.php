@@ -298,6 +298,36 @@ textarea:focus+label {
     top: 18px;
     transform: rotate(-40deg);
 }
+
+/* pengaturan total properti */
+.custom-btn {
+    font-size: 12px;
+    padding: 0px 7px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    border-color: transparent;
+    color: #1A44B2;
+    background-color: transparent;
+}
+
+.custom-btn:hover {
+    background-color: #1A44B2;
+    color: white;
+}
+
+.custom-badge {
+    font-size: 11px;
+    padding: 3px 5px;
+    margin-left: 3px;
+    background-color: #1A44B2 !important;
+    color: white !important;
+}
+
+.custom-btn:hover .custom-badge {
+    background-color: white !important;
+    color: #1A44B2 !important;
+}
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -335,5 +365,9 @@ textarea:focus+label {
                 </li>
             </ul>
         </nav>
+        <button type="button" class="btn btn-sm btn-outline-primary rounded-3 custom-btn">
+            Total Properti
+            <span class="badge custom-badge ml-2">4</span>
+        </button>
     </div>
 </div>

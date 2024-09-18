@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kelola_video extends CI_Controller
+class Kelola_video extends AUTH_Controller
 {
 
     var $template = 'template/index';
@@ -14,6 +14,7 @@ class Kelola_video extends CI_Controller
     public function index()
     {
         $data['tittle']          = 'kanpa.co.id | Video Reels';
+        $data['userdata']        = $this->userdata;
         $data['prop_select']     = $this->Reels_model->get_properti_select();
         $data['content']         = 'page_admin/reels/reels';
         $data['script']          = 'page_admin/reels/reels_js';

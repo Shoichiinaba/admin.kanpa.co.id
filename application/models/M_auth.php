@@ -1,64 +1,28 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-class M_auth extends CI_Model
-{
-	public function login($email, $password)
-	{
-		$this->db->select('*');
-		$this->db->from('user');
-		$this->db->where('email', $email);
-		$this->db->where(
-			'password',
-			md5($password)
-		);
+class M_auth extends CI_Model {
+    public function login($user, $pass) {
+        $this->db->select('*');
+        $this->db->from('agency');
 
-		$data = $this->db->get();
+        $this->db->group_start();
+        $this->db->where('username', $user);
+        $this->db->or_where('email', $user);
+        $this->db->group_end();
 
-		if ($data->num_rows() == 1) {
-			return $data->row();
-		} else {
-			return false;
-		}
-	}
-	function login_customer($post_email, $post_pass)
-	{
-		$this->db->select('*');
-		$this->db->from('customer');
-		$this->db->where('email', $post_email);
-		$this->db->where(
-			'password',
-			md5($post_pass)
-		);
+        $data = $this->db->get();
 
-		$data = $this->db->get();
+        if ($data->num_rows() == 1) {
+            $user_data = $data->row();
 
-		if ($data->num_rows() == 1) {
-			return $data->row();
-		} else {
-			return false;
-		}
-	}
-	function m_insert_password($password, $email)
-	{
-		$update = $this->db->set('password', md5($password))
-			->where('email', $email)
-			->update('customer');
-		return $update;
-	}
-	function m_insert_regist($data)
-	{
-		$this->db->insert('customer', $data);
-		return $this->db->affected_rows();
-	}
-	function update_token_customer($email, $token)
-	{
-		$update = $this->db->set('token_password', $token)
-			->where('email', $email)
-			->update('customer');
-		return $update;
-	}
+            if (password_verify($pass, $user_data->password)) {
+                return $user_data;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }
-
-/* End of file M_auth.php */
-/* Location: ./application/models/M_auth.php */

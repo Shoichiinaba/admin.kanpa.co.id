@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Properti extends CI_Controller
+class Properti extends AUTH_Controller
 {
 
     var $template = 'template/index';
@@ -15,6 +15,7 @@ class Properti extends CI_Controller
     public function index()
     {
         $data['tittle']         = 'kanpa.co.id | Properti';
+        $data['userdata']       = $this->userdata;
         $data['type']           = $this->Properti_model->get_type();
         $data['kota']           = $this->Properti_model->get_kota_select();
         $data['agent']          = $this->Properti_model->get_agent_select();
@@ -64,7 +65,10 @@ class Properti extends CI_Controller
                                                     $output .= '<h3 class="harga text-primary mb-2">Rp. ' . (floor($prop->harga) == $prop->harga ? number_format($prop->harga, 0, ',', '.') : number_format($prop->harga, 1, ',', '.')) . ' ' . $prop->satuan . '</h3>';
 
                                                     $output .= '
-                                                    <h4 class="display-7 unit pt-0 mb-1">' . $prop->judul_properti . '</h4>
+
+                                                    <h4 class="display-7 unit pt-0 mb-1 d-flex align-items-center">' . $prop->judul_properti . '
+                                                    <span class="badge bg-label-warning ms-2 shadow-lg rounded-3 px-8 py-7 fs-6">' . $prop->luas_tanah . '/' . $prop->luas_bangunan . '</span>
+                                                    </h4>
                                                     <p class="card-text">' . $prop->alamat . '</p>
                                                     <div>
                                                         <small class="footer-link me-4">LT : ' . $prop->luas_tanah . ' m2</small>

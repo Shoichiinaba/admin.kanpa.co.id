@@ -299,10 +299,9 @@ $(document).ready(function() {
                 $('#load_data').html('');
                 if (response.data.trim() === '') {
                     $('#load_data_message').html(
-                        '<div class="alert alert-danger alert-dismissible shadow-lg p-3 mb-4" role="alert">' +
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-                        '<span aria-hidden="true">&times;</span></button>' +
-                        '<i class="fa fa-folder-open"></i> Data Properti Tidak Ada Lagi...</div>'
+                        '<div class="alert alert-primary alert-dismissible" role="alert">' +
+                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                        '<i class="fa fa-folder-open"></i> Data Reels Tidak Ditemukan...</div>'
                     );
                     action = 'active';
                 } else {
@@ -385,10 +384,9 @@ function reloadVideoData() {
             $('#load_data').html('');
             if (response.data.trim() === '') {
                 $('#load_data_message').html(
-                    '<div class="alert alert-danger alert-dismissible shadow-lg p-3 mb-4" role="alert">' +
-                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-                    '<span aria-hidden="true">&times;</span></button>' +
-                    '<i class="fa fa-folder-open"></i> Data Properti Tidak Ada Lagi...</div>'
+                    '<div class="alert alert-primary alert-dismissible" role="alert">' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                    '<i class="fa fa-folder-open"></i> Data Reels Tidak Ditemukan...</div>'
                 );
                 action = 'active';
             } else {

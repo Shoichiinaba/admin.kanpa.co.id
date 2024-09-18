@@ -2,6 +2,25 @@
 * demo.css
 * File include item demo only specific css only
 ******************************************************************************/
+/* pagination color */
+
+.page-item.active .page-link {
+  background-color: #1A44B2 !important;
+  border-color: #1A44B2 !important;
+  color: white !important;
+}
+
+.page-link {
+  color: #1A44B2;
+}
+
+.page-link:hover {
+  background-color: #1A44B2;
+  color: white;
+}
+
+/* /////////////////////////// */
+
 
 .menu .app-brand.demo {
   height: 64px;

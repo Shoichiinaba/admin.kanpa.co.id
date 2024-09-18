@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kelola_banner extends CI_Controller
+class Kelola_banner extends AUTH_Controller
 {
 
     var $template = 'template/index';
@@ -14,6 +14,7 @@ class Kelola_banner extends CI_Controller
     public function index()
     {
         $data['tittle']          = 'kanpa.co.id | Banner';
+        $data['userdata']        = $this->userdata;
         $data['prop_select']     = $this->Banner_model->get_properti_select();
         $data['content']         = 'page_admin/banner/banner';
         $data['script']          = 'page_admin/banner/banner_js';
@@ -42,14 +43,31 @@ class Kelola_banner extends CI_Controller
                 $output .= '<div class="card position-relative">';
                 $output .= '<div class="row">';
 
-                // Conditional CSS based on type_banner
                 $output .= '<div class="' . (
-                    ($ban->type_banner == 'Full' || $ban->type_banner == 'KPR')
-                    ? 'image-full'
-                    : 'image-split'
+                    $ban->type_banner === 'Full'
+                        ? 'image-full'
+                        : (
+                            $ban->type_banner === 'KPR'
+                            ? 'image-kpr'
+                            : (
+                                in_array($ban->type_banner, ['Properti Dijual', 'Properti Disewa', 'All Properti'])
+                                ? 'image-group'
+                                : 'image-split'
+                            )
+                        )
                 ) . ' position-relative pl-0">';
 
-                $output .= '<div class="ribbon ribbon-top-left"><span>' . $ban->type_banner . '</span></div>';
+                $banner_text = $ban->type_banner;
+
+                if ($banner_text == 'Properti Disewa') {
+                    $banner_text = 'P. Disewa';
+                } elseif ($banner_text == 'Properti Dijual') {
+                    $banner_text = 'P. Dijual';
+                } elseif ($banner_text == 'All Properti') {
+                    $banner_text = 'All';
+                }
+
+                $output .= '<div class="ribbon ribbon-top-left"><span>' . $banner_text . '</span></div>';
                 $output .= '<img class="card-img card-img-left" src="' . base_url('upload/banner/' . $ban->foto_banner) . '" alt="Card image" />';
                 $output .= '</div>';
 
@@ -58,16 +76,19 @@ class Kelola_banner extends CI_Controller
                 $output .= '<div class="row mb-3">';
                 $output .= '<div class="col-lg-5">';
 
-                $badgeClass = ($ban->jenis_penawaran == 'Dijual') ? 'bg-warning' : 'bg-success';
+                $badgeClass = ($ban->penawaran == 'Dijual') ? 'bg-warning' : 'bg-success';
 
                 $output .= '<p class="card-text badge ' . $badgeClass . ' rounded-3">';
-                $output .= '<small class="text-white text-uppercase">' . $ban->jenis_penawaran . '</small>';
+                $output .= '<small class="text-white text-uppercase">' . $ban->penawaran . '</small>';
                 $output .= '</p>';
                 $output .= '</div>';
                 $output .= '</div>';
 
                 $output .= '<h3 class="harga text-primary mb-2 d-inline-block">' . $ban->judul_properti . '</h3>';
-                $output .= '<span class="badge bg-label-primary ms-2 d-inline-block shadow-lg">' . $ban->luas_tanah . '/' . $ban->luas_bangunan . '</span>';
+                if (!empty($ban->luas_tanah) && !empty($ban->luas_bangunan)) {
+                    $output .= '<span class="badge bg-label-primary ms-2 d-inline-block shadow-lg">' . $ban->luas_tanah . '/' . $ban->luas_bangunan . '</span>';
+                }
+
                 $output .= '</div>';
                 $output .= '</div>';
                 $output .= '</div>';
@@ -106,7 +127,7 @@ class Kelola_banner extends CI_Controller
     public function upload_banner() {
         $id_properti = $this->input->post('id_properti');
         $type_banner = $this->input->post('type_banner');
-        // $jenis_penawaran = $this->input->post('penawaran');
+        $jenis_penawaran = $this->input->post('penawaran');
 
         if (empty($_FILES['foto_banner']['name'])) {
             echo json_encode(['status' => 'error', 'message' => 'Tidak ada file yang diunggah']);
@@ -116,7 +137,13 @@ class Kelola_banner extends CI_Controller
         $config['upload_path'] = './upload/banner/';
         $config['allowed_types'] = 'jpg|jpeg|png';
         $config['max_size'] = 1024;
-        $config['file_name'] = 'banner_' . time();
+
+        if (in_array($type_banner, ['Properti Dijual', 'Properti Disewa', 'All Properti'])) {
+            $config['file_name'] = $type_banner;
+        } else {
+            $config['file_name'] = $type_banner . '_' . time();
+        }
+
         $this->load->library('upload');
 
         $this->upload->initialize($config);
@@ -128,7 +155,7 @@ class Kelola_banner extends CI_Controller
             $data = array(
                 'id_properti' => $id_properti,
                 'type_banner' => $type_banner,
-                // 'jenis_penawaran' => $jenis_penawaran,
+                'jenis_penawaran' => $jenis_penawaran,
                 'foto_banner' => $foto_banner,
                 'created' => date('Y-m-d H:i:s')
             );
@@ -200,7 +227,11 @@ class Kelola_banner extends CI_Controller
             $config['upload_path'] = $upload_path;
             $config['allowed_types'] = 'jpg|jpeg|png';
             $config['max_size'] = 1024;
-            $config['file_name'] = 'banner_' . time();
+            if (in_array($type_banner, ['Properti Dijual', 'Properti Disewa', 'All Properti'])) {
+                $config['file_name'] = $type_banner;
+            } else {
+                $config['file_name'] = $type_banner . '_' . time();
+            }
             $this->load->library('upload');
             $this->upload->initialize($config);
 

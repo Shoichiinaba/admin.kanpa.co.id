@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kelola_agent extends CI_Controller
+class Kelola_agent extends AUTH_Controller
 {
 
     var $template = 'template/index';
@@ -14,6 +14,7 @@ class Kelola_agent extends CI_Controller
     public function index()
     {
         $data['tittle']          = 'kanpa.co.id | Agent';
+        $data['userdata']        = $this->userdata;
         $data['data_agent']      = $this->Agent_model->get_agent();
         $data['content']         = 'page_admin/agent/agent';
         $data['script']          = 'page_admin/agent/agent_js';

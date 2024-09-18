@@ -21,7 +21,7 @@ class Banner_model extends CI_Model
     public function get_banner($limit, $start, $search = '') {
         if ($start < 0) $start = 0;
 
-        $this->db->select('banner.*, properti.*, detail_properti.*');
+        $this->db->select('banner.*, properti.*, detail_properti.*, banner.jenis_penawaran as penawaran');
         $this->db->from('banner');
         $this->db->join('properti', 'properti.id_properti = banner.id_properti', 'left');
         $this->db->join('detail_properti', 'detail_properti.id_properti = properti.id_properti', 'left');
@@ -45,7 +45,7 @@ class Banner_model extends CI_Model
         $this->db->from('banner');
         $this->db->join('properti', 'properti.id_properti = banner.id_properti', 'left');
         if (!empty($search)) {
-            $this->db->like('properto.judul_properti', $search);
+            $this->db->like('properti.judul_properti', $search);
         }
         return $this->db->count_all_results();
     }

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kelola_map extends CI_Controller
+class Kelola_map extends AUTH_Controller
 {
     var $template = 'template/index';
     public function __construct()
@@ -17,6 +17,7 @@ class Kelola_map extends CI_Controller
     {
 
         $data['tittle']         = 'kanpa.co.id | Kelola Maps';
+        $data['userdata']       = $this->userdata;
         $data['map_prov']       = $this->KelolaMap_model->get_provinsi();
         $data['provinsi']       = $this->KelolaMap_model->get_provinsi_select();
         $data['content']        = 'page_admin/kelola_map/map';

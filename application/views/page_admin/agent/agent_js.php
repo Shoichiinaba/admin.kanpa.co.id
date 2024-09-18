@@ -39,6 +39,7 @@
                                 <datalist id="datalistOptions">
                                     <option value="Property Advisor"></option>
                                     <option value="Bisnis Manager"></option>
+                                    <option value="Admin"></option>
                                 </datalist>
                             </div>
                         </div>
@@ -109,6 +110,7 @@
                                 <datalist id="editDatalistOptions">
                                     <option value="Property Advisor"></option>
                                     <option value="Bisnis Manager"></option>
+                                    <option value="Admin"></option>
                                 </datalist>
                             </div>
                         </div>

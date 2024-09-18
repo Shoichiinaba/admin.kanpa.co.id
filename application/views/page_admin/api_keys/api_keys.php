@@ -1,13 +1,12 @@
 <style>
-/* css loader */
+/* lazzy_loader */
 /* Placeholder styling */
 .post_data {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
     padding: 10px;
-    background-color: #ffffff;
-    /* White background */
+    background-color: #f4f4f4;
     border: 1px solid #ddd;
     border-radius: 8px;
 }
@@ -65,55 +64,19 @@
     }
 }
 
-
-/* untuk mengatur banner */
-.image-split {
+.avatar {
     display: flex;
+    margin-left: -15px;
+    margin-right: -57px;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 120px;
-    height: 90px;
-    padding: 0px;
+    width: 100px;
+    height: 100px;
 }
 
-.image-group {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 303px;
-    height: 75px;
-    padding: 0px;
+.avatar img {
+    max-width: 30%;
+    max-height: 30%;
 }
-
-.image-kpr {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 302px;
-    height: 74px;
-    padding: 0px;
-}
-
-.image-full {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 226px;
-    height: 90px;
-    padding: 0px;
-}
-
-.image-pro img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-}
-
-
 
 /* css inputan */
 .input-wrapper {
@@ -185,122 +148,44 @@ textarea:focus+label {
     transform: translateY(-20px);
 }
 
-.ribbon {
-    width: 62px;
-    height: 54px;
-    overflow: hidden;
-    position: absolute;
+/* css tombol copy */
+.btn-copy {
+    color: #6c757d;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: color 0.3s;
 }
 
-.ribbon::before,
-.ribbon::after {
-    position: absolute;
-    z-index: -1;
-    content: "";
-    display: block;
-    border: 5px solid #2980b9;
+.btn-copy:hover {
+    color: #1A44B2;
 }
 
-.ribbon span {
-    position: absolute;
-    display: block;
-    width: 246px;
-    padding: 5px 0;
-    background-color: #1A44B2;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    color: #fff;
-    font: 600 11px/1 "Lato", sans-serif;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-    text-transform: uppercase;
-    text-align: center;
-}
-
-/* top left*/
-.ribbon-top-left {
-    top: -6px;
-    left: -6px;
-}
-
-.ribbon-top-left::before,
-.ribbon-top-left::after {
-    border-top-color: transparent;
-    border-left-color: transparent;
-}
-
-.ribbon-top-left::before {
-    top: 0;
-    right: 0;
-}
-
-.ribbon-top-left::after {
-    bottom: 0;
-    left: 0;
-}
-
-.ribbon-top-left span {
-    right: -79px;
-    top: 16px;
-    transform: rotate(-40deg);
-}
-
-/* mengatur preview ubah */
-.alert {
-    position: relative;
-}
-
-#banner-preview {
-    width: 33%;
-    max-width: 300px;
-    height: auto;
-    overflow: hidden;
-    margin-top: 10px;
-    margin-left: 225px;
-}
-
-#banner-preview img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-#change-foto {
-    position: sticky;
-    bottom: 209px;
-    right: 365px;
-    margin: 0px;
-}
-
-
-.modal-backdrop {
-    z-index: 1040 !important;
-}
-
-.swal2-container.swal2-front {
-    z-index: 1070 !important;
+/* css key data */
+.key-data {
+    height: 59px;
 }
 </style>
 
-
 <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="demo-inline-spacing mb-3">
-        <button type="button" class="btn btn-sm btn-primary rounded-2 shadow-lg" data-bs-toggle="modal"
-            data-bs-target="#add-banner">Upload Banner</button>
-    </div>
-    <div class="d-flex justify-content-between align-items-center mb-0">
-        <div>
-            <h5 class="mb-0">Daftar banner</h5>
+    <div class="row pb-3">
+        <div class="demo-inline-spacing mb-3">
+            <button type="button" class="btn btn-sm btn-primary rounded-2" data-bs-toggle="modal"
+                data-bs-target="#create-key">Buat Key</button>
         </div>
-        <form class="d-flex shadow-lg" style="width: 200px;">
-            <div class="input-group">
-                <span class="input-group-text"><i class="tf-icons bx bx-search"></i></span>
-                <input type="text" id="search-banner" class="form-control" placeholder="Search..." />
+        <div class="col-md-12 col-lg-12 order-2 mt-0">
+            <div class="card h-100">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="card-title m-0 me-2">API Key</h5>
+                </div>
+                <div class="card-body shadow-lg">
+                    <ul class="p-0 m-0" id="load_data">
+                    </ul>
+                    <div id="load_data_message"></div>
+                </div>
             </div>
-        </form>
+        </div>
+        <!-- Pagination -->
     </div>
-    <div class="row row-cols-1 row-cols-md-3 g-4 mb-3 mt-0" id="load_data">
-    </div>
-    <div id="load_data_message"></div>
-    <!-- Pagination -->
     <div class="d-flex justify-content-center">
         <nav aria-label="Page navigation">
             <ul class="pagination pagination-sm">
