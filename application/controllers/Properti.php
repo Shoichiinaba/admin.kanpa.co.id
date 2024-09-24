@@ -134,12 +134,14 @@ class Properti extends AUTH_Controller
 
             echo json_encode([
                 'data' => $output,
-                'total_pages' => $total_pages
+                'total_pages' => $total_pages,
+                'total_data' => $total_data
             ]);
         } else {
             echo json_encode([
                 'data' => '',
-                'total_pages' => $total_pages
+                'total_pages' => $total_pages,
+                'total_data' => 0
             ]);
         }
     }
@@ -291,6 +293,7 @@ class Properti extends AUTH_Controller
     {
         $id_properti = $this->uri->segment(3);
         $data['tittle']         = 'kanpa.co.id | Detail Properti';
+        $data['userdata']       = $this->userdata;
         $data['detail']         = $this->Properti_model->get_properti_det($id_properti);
         $data['promo']          = $this->Properti_model->get_promo($id_properti);
         $data['content']        = 'page_admin/detail_properti/detail';

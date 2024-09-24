@@ -30,9 +30,17 @@ $(document).ready(function() {
         }, 2000);
     }
 
-    $('.nav-link').on('click', function() {
+    $('.map-btn').on('click', function() {
+        $('.map-btn').removeClass('active');
+        $('.tab-pane').removeClass('show active').html('');
+
+        $(this).addClass('active');
+
         var mapId = $(this).data('id');
         var id_prov = $(this).data('id_prov');
+
+        var targetTab = $(`#map-${mapId}`);
+        targetTab.addClass('show active');
 
         $.ajax({
             url: '<?php echo base_url('Maps/get_map'); ?>',
@@ -50,10 +58,8 @@ $(document).ready(function() {
                     return;
                 }
 
-                var targetTab = $(`#map-${mapId}`);
-
                 if (data.error) {
-                    targetTab.find('.error-message-container').html(`
+                    targetTab.html(`
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         ${data.error}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -67,8 +73,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error('Terjadi kesalahan:', error);
-                var targetTab = $(`#map-${mapId}`);
-                targetTab.find('.error-message-container').html(`
+                targetTab.html(`
                 <div class="alert alert-danger alert-dismissible" role="alert">
                     Terjadi kesalahan saat mengambil data.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -78,7 +83,6 @@ $(document).ready(function() {
         });
     });
 
-    $('.nav-link.active').click();
-
+    $('.map-btn.active').trigger('click');
 });
 </script>

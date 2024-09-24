@@ -150,6 +150,7 @@
                                     <?php endif; ?>
                                 </ul>
                             </div>
+                            <?php if ($detail[0]->taman_bermain == 1): ?>
                             <li class="d-flex mb-0">
                                 <div class="avatar flex-shrink-0 me-3">
                                     <span class="avatar-initial rounded bg-label-info"><i
@@ -160,6 +161,7 @@
                                         <h6 class="mb-0">Fasilitas</h6>
                                     </div>
                             </li>
+                            <?php endif; ?>
                             <div class="demo-inline-spacing fasiliti">
                                 <ul class="list-unstyled d-flex flex-wrap">
                                     <?php if ($detail[0]->taman_bermain == 1): ?>

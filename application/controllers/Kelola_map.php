@@ -278,6 +278,7 @@ class Kelola_map extends AUTH_Controller
     public function daftar_kota()
     {
         $data['tittle']         = 'kanpa.co.id | Daftar Kota & Kabupaten';
+        $data['userdata']       = $this->userdata;
         $data['provinsi']       = $this->KelolaMap_model->get_provinsi_select();
         $data['content']        = 'page_admin/kota/kota';
         $data['script']         = 'page_admin/kota/kota_js';

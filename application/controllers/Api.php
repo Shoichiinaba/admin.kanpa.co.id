@@ -281,10 +281,8 @@ class Api extends REST_Controller
         $this->db->group_by('map.id');
         $this->db->order_by("map.id", "ASC");
 
-        // Eksekusi query
         $result = $this->db->get()->result();
 
-        // Jika data ditemukan
         if ($result) {
             $this->response($result, 200);
         } else {
@@ -380,4 +378,68 @@ class Api extends REST_Controller
 			$this->response(array('status' => 'not found', 'message' => 'Data tidak ditemukan'), 404);
 		}
 	}
+
+    function data_article_get()
+    {
+        if (!$this->verify_api_key()) return;
+
+        $id = $this->get('id_data_berita');
+
+        $this->db->select('
+            data_berita.id_data_berita,
+            data_berita.berita_id,
+            data_berita.text_berita,
+            foto_berita.file_foto_berita,
+            data_berita.file_foto_btn,
+            data_berita.link_btn,
+        ');
+
+        $this->db->from('data_berita');
+        $this->db->join('foto_berita', 'foto_berita.data_berita_id = data_berita.id_data_berita');
+
+        if ($id) {
+            $this->db->where('data_berita.id_data_berita', $id);
+        }
+
+        $berita = $this->db->get()->result();
+
+        if ($berita) {
+            $this->response($berita, 200);
+        } else {
+            $this->response(array('status' => 'not found'), 404);
+        }
+    }
+
+    function article_get()
+    {
+        if (!$this->verify_api_key()) return;
+
+        $id = $this->get('id_berita');
+
+        $this->db->select('
+            berita.id_berita,
+            berita.judul_berita,
+            berita.tgl_berita,
+            berita.meta_desk,
+            berita.tag_berita,
+            berita.foto_berita,
+            berita.meta_foto,
+            berita.view_berita
+        ');
+
+        $this->db->from('berita');
+
+        if ($id) {
+            $this->db->where('berita.id_berita', $id);
+        }
+
+        $berita = $this->db->get()->result();
+
+        if ($berita) {
+            $this->response($berita, 200);
+        } else {
+            $this->response(array('status' => 'not found'), 404);
+        }
+    }
+
 }

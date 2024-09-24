@@ -24,6 +24,9 @@
 
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="<?= base_url('assets'); ?>/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="<?= base_url('assets'); ?>/vendor/css/core.css" class="template-customizer-core-css" />
@@ -39,12 +42,12 @@
     <link rel="stylesheet" href="<?= base_url('assets'); ?>/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <link rel="stylesheet" href="<?= base_url('assets'); ?>/vendor/libs/apex-charts/apex-charts.css" />
-    <!-- Page CSS -->
 
     <!-- Helpers -->
     <script src="<?= base_url('assets'); ?>/vendor/js/helpers.js"></script>
     <script src="<?= base_url('assets'); ?>/js/config.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>

@@ -24,19 +24,19 @@
         <li class="menu-item <?php echo ($this->uri->segment(1) == 'Properti') ? 'active' : ''; ?>">
             <a href="<?php echo site_url('Properti'); ?>" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-map-alt"></i>
-                <div data-i18n="Analytics">Kelola Properti</div>
+                <div data-i18n="Analytics">Kelola Property</div>
             </a>
         </li>
         <li class="menu-item <?php echo ($this->uri->segment(1) == 'Kelola_video') ? 'active' : ''; ?>">
             <a href="<?php echo site_url('Kelola_video'); ?>" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-video-recording"></i>
-                <div data-i18n="Analytics">Kelola Video</div>
+                <div data-i18n="Analytics">Kelola Videos</div>
             </a>
         </li>
         <li class="menu-item <?php echo ($this->uri->segment(1) == 'Kelola_map') ? 'active' : ''; ?>">
             <a href="<?php echo site_url('Kelola_map'); ?>" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-map-alt"></i>
-                <div data-i18n="Analytics">Kelola Map</div>
+                <div data-i18n="Analytics">Kelola Maps</div>
             </a>
         </li>
         <li class="menu-item <?php echo ($this->uri->segment(1) == 'Kelola_agent') ? 'active' : ''; ?>">
@@ -51,6 +51,12 @@
                 <div data-i18n="Analytics">Kelola Banner</div>
             </a>
         </li>
+        <li class="menu-item <?php echo ($this->uri->segment(1) == 'Berita') ? 'active' : ''; ?>">
+            <a href="<?php echo site_url('Berita'); ?>" class="menu-link">
+                <i class='menu-icon tf-icons bx bxs-news'></i>
+                <div data-i18n="Analytics">Kelola Article</div>
+            </a>
+        </li>
 
         <li class="menu-item <?php echo ($this->uri->segment(1) == 'Api_keys') ? 'active' : ''; ?>">
             <a href="<?php echo site_url('Api_keys'); ?>" class="menu-link">
@@ -59,12 +65,12 @@
             </a>
         </li>
 
-        <li class="menu-item <?php echo ($this->uri->segment(1) == 'Maps') ? 'active' : ''; ?>">
+        <!-- <li class="menu-item <?php echo ($this->uri->segment(1) == 'Maps') ? 'active' : ''; ?>">
             <a href="<?php echo site_url('Maps'); ?>" class="menu-link">
                 <i class='menu-icon tf-icons bx bx-landscape'></i>
                 <div data-i18n="Analytics">Tes mapAPI</div>
             </a>
-        </li>
+        </li> -->
     </ul>
 
 </aside>

@@ -346,28 +346,30 @@ textarea:focus+label {
             </div>
         </form>
     </div>
-
     <div class="row mb-0" id="load_data">
     </div>
     <div id="load_data_message"></div>
     <!-- Pagination -->
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center align-items-center">
         <nav aria-label="Page navigation">
-            <ul class="pagination pagination-sm">
+            <ul class="pagination pagination-sm mb-0">
                 <li class="page-item prev">
                     <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-left"></i></a>
                 </li>
                 <li class="page-item active">
                     <a class="page-link" href="javascript:void(0);">1</a>
                 </li>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0);">2</a>
+                </li>
                 <li class="page-item next">
                     <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-right"></i></a>
                 </li>
             </ul>
         </nav>
-        <button type="button" class="btn btn-sm btn-outline-primary rounded-3 custom-btn">
+        <button type="button" class="btn btn-sm btn-outline-primary rounded-3 custom-btn ms-3 py-0 px-1">
             Total Properti
-            <span class="badge custom-badge ml-2">4</span>
+            <span class="badge custom-badge ms-2">5</span>
         </button>
     </div>
 </div>

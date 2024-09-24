@@ -314,28 +314,22 @@ var myDropzone = new Dropzone("#dropzone", {
     init: function() {
         var myDropzone = this;
 
-        // Menambahkan tombol hapus kustom dengan gaya yang diinginkan
         this.on("addedfile", function(file) {
-            // Buat elemen tombol hapus
             var removeButton = Dropzone.createElement(
                 "<button type='button' class='btn btn-xs btn-outline-danger btn-remove'>Hapus</button>"
             );
 
-            // Tambahkan tombol hapus ke elemen preview file
             file.previewElement.appendChild(removeButton);
 
-            // Tambahkan event listener untuk menghapus file
             removeButton.addEventListener("click", function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 myDropzone.removeFile(file);
             });
 
-            // Tambahkan class dropzone ke elemen preview file
             $(file.previewElement).addClass('dz-preview');
         });
 
-        // Ketika tombol submit diklik, proses semua file di antrian
         $("#submitProperti").click(function(e) {
             e.preventDefault();
 
@@ -350,7 +344,6 @@ var myDropzone = new Dropzone("#dropzone", {
                 return;
             }
 
-            // Convert array to comma-separated string
             var area_terdekat = selectedTags.join(', ');
 
             if (!id_kota || !id_type) {
@@ -360,7 +353,6 @@ var myDropzone = new Dropzone("#dropzone", {
                 return;
             }
 
-            // Serialize form data dan tambahkan ke Dropzone
             var formData = new FormData($("#jualPropertiForm")[0]);
 
             // Mengirim parameter form data ke Dropzone
@@ -436,7 +428,6 @@ var myDropzone = new Dropzone("#dropzone", {
             $("#responseMessage").html('<div class="alert alert-danger">Terjadi kesalahan: ' +
                 response + '</div>');
 
-            // Sembunyikan ikon dan teks loading
             $("#loadingIcon").addClass('d-none');
             $("#loadingText").addClass('d-none');
             $("#submitText").removeClass('d-none');
@@ -508,6 +499,7 @@ $(document).ready(function() {
     var start = 0;
     var action = 'inactive';
     var total_pages = 1;
+    var total_data = 0;
 
     function lazzy_loader(limit) {
         var output = '';
@@ -555,7 +547,9 @@ $(document).ready(function() {
                     $('#load_data_message').html("");
                     action = 'inactive';
                     total_pages = response.total_pages;
+                    total_data = response.total_data;
                     update_pagination();
+                    update_total_data();
                 }
             }
         });
@@ -574,6 +568,10 @@ $(document).ready(function() {
             '<li class="page-item next"><a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-right"></i></a></li>';
 
         $('.pagination').html(paginationHtml);
+    }
+
+    function update_total_data() {
+        $('.custom-badge').text(total_data);
     }
 
     $('.pagination').on('click', '.page-item', function() {

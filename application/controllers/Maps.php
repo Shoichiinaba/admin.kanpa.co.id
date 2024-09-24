@@ -18,8 +18,7 @@ class Maps extends AUTH_Controller
     public function index()
     {
         $data['tittle'] = 'kanpa.co.id | Kelola Maps';
-        // $api_url = 'https://admin.kanpa.co.id/Api/mapdata';
-        $api_url ='http://localhost:8080/admin.kanpa.co.id/Api/mapdata';
+        $api_url = 'https://admin.kanpa.co.id/Api/mapdata';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -59,7 +58,7 @@ class Maps extends AUTH_Controller
         $id = $this->input->post('id');
 
         $client = new Client();
-        $api_url = 'http://localhost:8080/admin.kanpa.co.id/Api/map?id=' . $id;
+        $api_url = 'https://admin.kanpa.co.id/Api/map?id=' . $id;
 
         try {
             $response = $client->request('GET', $api_url, [
@@ -91,8 +90,7 @@ class Maps extends AUTH_Controller
     public function allColor()
     {
         $client = new \GuzzleHttp\Client();
-        // $api_url = 'https://admin.kanpa.co.id/Api/mapcolor';
-        $api_url = 'http://localhost:8080/admin.kanpa.co.id/Api/mapcolor';
+        $api_url = 'https://admin.kanpa.co.id/Api/mapcolor';
 
         try {
             $response = $client->request('GET', $api_url, [
