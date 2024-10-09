@@ -1,3 +1,12 @@
+<!-- Load Bootstrap CSS dan JS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+<!-- Load Summernote CSS dan JS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
+
+
 <!-- code modal untuk input promo -->
 <div class="modal fade" id="buat-promo" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -84,6 +93,11 @@ $(document).ready(function() {
     }, 2000);
 
     // kode input promo
+    $('#summernote').on('summernote.init', function() {
+        // Disable tombol dropdown
+        $('.note-btn.dropdown-toggle').prop('enable', true);
+    });
+
     $('#summernote').summernote({
         height: 300,
         placeholder: 'Masukkan deskripsi promo...',

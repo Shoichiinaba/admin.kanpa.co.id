@@ -18,6 +18,7 @@ class Properti extends AUTH_Controller
         $data['userdata']       = $this->userdata;
         $data['type']           = $this->Properti_model->get_type();
         $data['kota']           = $this->Properti_model->get_kota_select();
+        $data['status']         = $this->Properti_model->get_status_select();
         $data['agent']          = $this->Properti_model->get_agent_select();
         $data['content']        = 'page_admin/properti/properti';
         $data['script']         = 'page_admin/properti/properti_js';
@@ -67,7 +68,7 @@ class Properti extends AUTH_Controller
                                                     $output .= '
 
                                                     <h4 class="display-7 unit pt-0 mb-1 d-flex align-items-center">' . $prop->judul_properti . '
-                                                    <span class="badge bg-label-warning ms-2 shadow-lg rounded-3 px-8 py-7 fs-6">' . $prop->luas_tanah . '/' . $prop->luas_bangunan . '</span>
+                                                    <span class="badge bg-label-warning ms-2 shadow-lg rounded-3 px-8 py-7 fs-6">' . $prop->luas_bangunan . '/' . $prop->luas_tanah . '</span>
                                                     </h4>
                                                     <p class="card-text">' . $prop->alamat . '</p>
                                                     <div>
@@ -156,9 +157,10 @@ class Properti extends AUTH_Controller
 
     public function store() {
         // Simpan data properti
-        $id_kota = $this->input->post('id_kota');
-        $id_type = $this->input->post('id_type');
-        $area_terdekat = $this->input->post('area_terdekat');
+        $id_kota        = $this->input->post('id_kota');
+        $id_type        = $this->input->post('id_type');
+        $id_status      = $this->input->post('id_status');
+        $area_terdekat  = $this->input->post('area_terdekat');
 
         if (empty($id_kota) || empty($id_type)) {
             echo json_encode(['status' => 'error', 'message' => 'Kota dan tipe properti harus dipilih.']);
@@ -168,14 +170,15 @@ class Properti extends AUTH_Controller
         $jenis_penawaran = $this->input->post('penawaran') ? $this->input->post('penawaran') : 'Dijual';
 
         $data_properti = [
-            'id_kota' => $id_kota,
-            'id_type' => $id_type,
-            'jenis_penawaran' => $jenis_penawaran,
-            'judul_properti' => $this->input->post('judul_properti'),
-            'alamat' => $this->input->post('alamat'),
-            'lokasi' => $this->input->post('lokasi'),
-            'area_terdekat' => $area_terdekat,
-            'dibuat' => date('Y-m-d H:i:s')
+            'id_kota'           => $id_kota,
+            'id_type'           => $id_type,
+            'id_status'         => $id_status,
+            'jenis_penawaran'   => $jenis_penawaran,
+            'judul_properti'    => $this->input->post('judul_properti'),
+            'alamat'            => $this->input->post('alamat'),
+            'lokasi'            => $this->input->post('lokasi'),
+            'area_terdekat'     => $area_terdekat,
+            'dibuat'            => date('Y-m-d H:i:s')
         ];
 
         $id_properti = $this->Properti_model->insert_properti($data_properti);

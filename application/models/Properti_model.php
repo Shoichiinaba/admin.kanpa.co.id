@@ -10,10 +10,19 @@ class Properti_model extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+
     function get_kota_select()
     {
         $this->db->select('*');
         $this->db->from('wilayah_kota');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function get_status_select()
+    {
+        $this->db->select('*');
+        $this->db->from('status_properti');
         $query = $this->db->get();
         return $query->result();
     }

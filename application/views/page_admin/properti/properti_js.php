@@ -31,6 +31,20 @@
                             <input type="text" name="id_nama" class="form-control">
                         </div>
                         <div class="row ">
+                            <div class="input-wrapper col-12 mb-3">
+                                <input class="form-control" list="data-status" name="status_properti"
+                                    id="status-properti" placeholder="Pilih Status..." />
+                                <label for="status-properti" class="label-in">Status Properti</label>
+
+                                <datalist id="data-status">
+                                    <?php foreach ($status as $sts) : ?>
+                                    <option data-id="<?php echo $sts->id_status; ?>"
+                                        value="<?php echo $sts->status; ?>">
+                                    </option>
+                                    <?php endforeach; ?>
+                                </datalist>
+                                <input type="hidden" name="id_status" id="id-status">
+                            </div>
                             <div class="input-wrapper col-6" id="penawaran">
                                 <input class="form-control" list="data-penawaran" name="penawaran"
                                     placeholder="Pilih jenis Penawaran..." />
@@ -296,6 +310,18 @@ $(document).ready(function() {
             fetchTagsForProvinsi(idProvinsi);
         }
     });
+
+    // Event listener untuk input status
+    $('#status-properti').on('input', function() {
+        var inputVal = $(this).val();
+        var selectedOption = $('#data-status option').filter(function() {
+            return this.value == inputVal;
+        });
+
+        if (selectedOption.length) {
+            $('#id-status').val(selectedOption.data('id'));
+        }
+    });
 });
 
 // kode simpan properti
@@ -334,6 +360,7 @@ var myDropzone = new Dropzone("#dropzone", {
             e.preventDefault();
 
             var id_kota = $('#id-kota').val();
+            var id_status = $('#id-status').val();
             var id_type = $("input[name='id_nama']").val();
             var selectedTags = $('#choices-multiple-remove-button').val();
 
@@ -358,6 +385,7 @@ var myDropzone = new Dropzone("#dropzone", {
             // Mengirim parameter form data ke Dropzone
             myDropzone.options.params = {
                 id_kota: id_kota,
+                id_status: id_status,
                 id_type: id_type,
                 penawaran: formData.get('penawaran'),
                 judul_properti: formData.get('judul_properti'),

@@ -50,6 +50,7 @@ class Api extends REST_Controller
             properti.area_terdekat,
             properti.viewer,
             properti.dibuat,
+            status_properti.status,
             detail_properti.jml_kamar,
             detail_properti.jml_kamar_mandi,
             detail_properti.luas_bangunan,
@@ -89,6 +90,7 @@ class Api extends REST_Controller
             promo.nama_promo
         ');
         $this->db->from('properti');
+        $this->db->join('status_properti', 'status_properti.id_status = properti.id_status');
         $this->db->join('detail_properti', 'detail_properti.id_properti = properti.id_properti', 'left');
         $this->db->join('gambar_properti', 'gambar_properti.id_properti = properti.id_properti', 'left');
         $this->db->join('fasilitas_properti', 'fasilitas_properti.id_properti = properti.id_properti', 'left');
@@ -389,13 +391,13 @@ class Api extends REST_Controller
             data_berita.id_data_berita,
             data_berita.berita_id,
             data_berita.text_berita,
-            foto_berita.file_foto_berita,
+            COALESCE(foto_berita.file_foto_berita, "") as file_foto_berita,
             data_berita.file_foto_btn,
-            data_berita.link_btn,
+            data_berita.link_btn
         ');
 
         $this->db->from('data_berita');
-        $this->db->join('foto_berita', 'foto_berita.data_berita_id = data_berita.id_data_berita');
+        $this->db->join('foto_berita', 'foto_berita.data_berita_id = data_berita.id_data_berita', 'left');
 
         if ($id) {
             $this->db->where('data_berita.id_data_berita', $id);
@@ -439,6 +441,22 @@ class Api extends REST_Controller
             $this->response($berita, 200);
         } else {
             $this->response(array('status' => 'not found'), 404);
+        }
+    }
+
+    function article_put()
+    {
+        if (!$this->verify_api_key()) return;
+
+        $params = array(
+            'viewer_berita' => $this->put('viewer_berita'),
+        );
+        $this->db->where('id_berita', $this->put('id_berita'));
+        $execute = $this->db->update('berita', $params);
+        if ($execute) {
+            $this->response(array('status' => 'success'), 201);
+        } else {
+            $this->response(array('status' => 'fail'), 502);
         }
     }
 

@@ -4,9 +4,22 @@
     data-assets-path="<?= base_url('assets'); ?>/" data-template="vertical-menu-template-free">
 
 <head>
+    <!-- meta -->
     <meta charset="utf-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta property="og:image" content="<?= base_url('assets'); ?>/img/logo/A.png" />
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="" />
+    <meta property="og:description" content="" />
+    <meta name="twitter:title" content="" />
+    <meta name="twitter:image" content="" />
+    <meta name="twitter:url" content="" />
+    <meta name="twitter:card" content="" />
 
     <title><?= $tittle; ?></title>
 

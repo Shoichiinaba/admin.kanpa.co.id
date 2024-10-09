@@ -2,39 +2,45 @@
 class M_berita extends CI_Model
 {
 
-
-    function m_data_berita($filter)
+    public function m_data_berita($limit, $start, $filter)
     {
-        if ($filter == 'All') {
-            $this->db->select('*');
-            $this->db->from('berita');
-            $this->db->order_by('id_berita', 'desc');
-            $query = $this->db->get();
-            return $query->result();
-        } else {
-            $this->db->select('*');
-            $this->db->from('berita');
-            $this->db->Where('status_berita', $filter);
-            $this->db->order_by('id_berita', 'desc');
-            $query = $this->db->get();
-            return $query->result();
+        $this->db->select('*');
+        $this->db->from('berita');
+
+        if ($filter && $filter !== 'All') {
+            $this->db->where('status_berita', $filter);
         }
+        $this->db->order_by('id_berita', 'desc');
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        return $query;
     }
+
+    public function count_data_berita($filter)
+    {
+        $this->db->select('*');
+        $this->db->from('berita');
+
+        if ($filter && $filter !== 'All') {
+            $this->db->where('status_berita', $filter);
+        }
+
+        return $this->db->count_all_results();
+    }
+
     function m_data_artikel_berita($id_berita)
     {
         $this->db->select('*');
         $this->db->from('data_berita');
         $this->db->where('berita_id', $id_berita);
-        // $this->db->order_by('id_data_berita', 'asc');
         $query = $this->db->get();
         return $query->result();
     }
+
     function m_data_foto_berita($id_berita)
     {
         $this->db->select('*');
         $this->db->from('foto_berita');
-        // $this->db->where('data_berita_id', $id_berita);
-        // $this->db->order_by('id_data_berita', 'asc');
         $query = $this->db->get();
         return $query->result();
     }
@@ -44,6 +50,7 @@ class M_berita extends CI_Model
         $result = $this->db->insert('data_berita', $data);
         return $result;
     }
+
     function m_delete_content($id_data_berita)
     {
         $delete_foto = $this->db->where('data_berita_id', $id_data_berita)
@@ -53,6 +60,7 @@ class M_berita extends CI_Model
         return $delete_foto;
         return $delete_data_berita;
     }
+
     function m_simpan_foto_berita($data_berita_id, $file_foto_berita)
     {
         $data = array(
@@ -62,12 +70,14 @@ class M_berita extends CI_Model
         $result = $this->db->insert('foto_berita', $data);
         return $result;
     }
+
     function m_delete_foto_berita($id_foto_berita)
     {
         $delete = $this->db->where('id_foto_berita', $id_foto_berita)
             ->delete('foto_berita');
         return $delete;
     }
+
     function m_simpan_data_berita($judul_berita, $tgl_berita, $meta_desk, $tag_berita, $foto_berita)
     {
         $data = array(
@@ -90,6 +100,7 @@ class M_berita extends CI_Model
             ->update('data_berita');
         return $update;
     }
+
     function m_edit_data_foto_berita($id_berita, $judul_berita, $tgl_berita, $meta_desk, $tag_berita, $foto_berita)
     {
         $update = $this->db->set('judul_berita', $judul_berita)
@@ -97,11 +108,11 @@ class M_berita extends CI_Model
             ->set('meta_desk', $meta_desk)
             ->set('tag_berita', $tag_berita)
             ->set('foto_berita', $foto_berita)
-            // ->set('meta_foto', $meta_foto)
             ->where('id_berita', $id_berita)
             ->update('berita');
         return $update;
     }
+
     function m_edit_berita($id_berita, $judul_berita, $tgl_berita, $meta_desk, $tag_berita)
     {
         $update = $this->db->set('judul_berita', $judul_berita)
@@ -119,18 +130,20 @@ class M_berita extends CI_Model
             ->update('berita');
         return $update;
     }
+
     function m_delete_berita($id_berita)
     {
         $delete = $this->db->where('id_berita', $id_berita)
             ->delete('berita');
         return $delete;
     }
-    function m_validasi_index($id_berita, $status_berita)
+
+    public function m_validasi_index($id_berita, $status_berita)
     {
-        $update = $this->db->set('status_berita', $status_berita)
-            ->where('id_berita', $id_berita)
-            ->update('berita');
-        return $update;
+        $this->db->set('status_berita', $status_berita);
+        $this->db->where('id_berita', $id_berita);
+
+        return $this->db->update('berita');
     }
 
     function m_delete_artikel($id_berita, $data_berita_id)
