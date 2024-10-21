@@ -127,7 +127,7 @@
         signInBtn.disabled = true;
         signInBtn.innerHTML = `
         <span class="d-flex justify-content-center align-items-center">
-            Procesing...
+            Processing...
             <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
         </span>
     `;

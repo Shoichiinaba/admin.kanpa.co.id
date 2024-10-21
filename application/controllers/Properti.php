@@ -297,8 +297,11 @@ class Properti extends AUTH_Controller
         $id_properti = $this->uri->segment(3);
         $data['tittle']         = 'kanpa.co.id | Detail Properti';
         $data['userdata']       = $this->userdata;
+        $data['status']         = $this->Properti_model->get_status_select();
         $data['detail']         = $this->Properti_model->get_properti_det($id_properti);
         $data['promo']          = $this->Properti_model->get_promo($id_properti);
+        $data['kota']           = $this->Properti_model->get_kota_select();
+        $data['agent']          = $this->Properti_model->get_agent_select();
         $data['content']        = 'page_admin/detail_properti/detail';
         $data['script']         = 'page_admin/detail_properti/detail_js';
         $this->load->view($this->template, $data);
@@ -347,6 +350,156 @@ class Properti extends AUTH_Controller
         $this->Properti_model->update_promo($id_promo, $data);
 
         echo json_encode(['status' => 'success']);
+    }
+
+
+    public function upload_gambar()
+    {
+        $this->load->library('upload');
+
+        $id_properti = $this->input->post('id_properti');
+
+        $config['upload_path'] = './upload/gambar_properti/';
+        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['max_size'] = 2048;
+
+        $this->upload->initialize($config);
+
+        $files = $_FILES['gambar'];
+        $file_count = count($files['name']);
+
+        $response = [];
+
+        for ($i = 0; $i < $file_count; $i++) {
+            $_FILES['file']['name'] = $files['name'][$i];
+            $_FILES['file']['type'] = $files['type'][$i];
+            $_FILES['file']['tmp_name'] = $files['tmp_name'][$i];
+            $_FILES['file']['error'] = $files['error'][$i];
+            $_FILES['file']['size'] = $files['size'][$i];
+
+            if ($this->upload->do_upload('file')) {
+                $uploadData = $this->upload->data();
+
+                $file_name = md5(time() . $uploadData['file_name']) . '.' . $uploadData['file_ext'];
+
+                rename($uploadData['full_path'], $uploadData['file_path'] . $file_name);
+
+                $this->Properti_model->simpan_gambar($file_name, $id_properti);
+                $response[] = $file_name;
+
+            } else {
+                echo json_encode(array('error' => $this->upload->display_errors()));
+                return;
+            }
+        }
+
+        echo json_encode(array('success' => 'Gambar berhasil diunggah!', 'files' => $response));
+    }
+
+    public function get_gambar()
+    {
+        $id_properti = $this->input->post('id_properti');
+
+        $gambar = $this->Properti_model->get_gambar($id_properti);
+        echo json_encode(['gambar' => $gambar]);
+    }
+
+    public function hapus_gambar()
+    {
+        $id_properti = $this->input->post('id_properti');
+        $gambar = $this->input->post('gambar');
+
+        if ($id_properti && $gambar) {
+            $properti = $this->Properti_model->get_gambar_by_nama($id_properti, $gambar);
+
+            if ($properti) {
+                $foto_name = $properti->gambar;
+
+                if (!empty($foto_name) && file_exists('./upload/gambar_properti/' . $foto_name)) {
+                    unlink('./upload/gambar_properti/' . $foto_name);
+                }
+
+                $this->Properti_model->hapus_gambar($id_properti, $gambar);
+
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Gambar berhasil dihapus.'
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Gambar tidak ditemukan.'
+                ]);
+            }
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Data tidak valid.'
+            ]);
+        }
+    }
+
+    public function updateProperti() {
+
+        $id_properti = $this->input->post('id_properti');
+
+        // Mengambil nilai data properti
+        $data_properti = array(
+            'judul_properti'   => $this->input->post('judul_properti'),
+            'alamat'           => $this->input->post('alamat'),
+            'lokasi'           => $this->input->post('lokasi'),
+            'area_terdekat'    => implode(', ', $this->input->post('area_terdekat')),
+            'id_status'        => $this->input->post('id_status'),
+            'id_type'          => $this->input->post('id_type'),
+            'jenis_penawaran'  => $this->input->post('penawaran'),
+            'id_kota'          => $this->input->post('id_kota'),
+        );
+
+        // Mengambil nilai detail properti
+        $data_detail = array(
+            'jml_kamar'        => $this->input->post('jml_kamar'),
+            'jml_kamar_mandi'  => $this->input->post('jml_kamar_mandi'),
+            'luas_bangunan'    => $this->input->post('luas_bangunan'),
+            'luas_tanah'       => $this->input->post('luas_tanah'),
+            'level'            => $this->input->post('level'),
+            'daya_listrik'     => $this->input->post('daya_listrik'),
+            'carport'          => $this->input->post('carport'),
+            'ruang_tamu'       => $this->input->post('ruang_tamu'),
+            'ruang_keluarga'   => $this->input->post('ruang_keluarga'),
+            'taman'            => $this->input->post('taman'),
+            'ruang_makan'      => $this->input->post('ruang_makan'),
+            'balkon'           => $this->input->post('balkon'),
+            'harga'            => $this->input->post('harga'),
+            'satuan'     => $this->input->post('satuan'),
+            'deskripsi'        => $this->input->post('deskripsi'),
+        );
+
+        // Verifikasi dan mengambil nilai checkbox, memastikan hanya 1 atau 0
+        $data_fasilitas = array(
+            'jalan'            => $this->input->post('jalan'),
+            'masjid'           => $this->input->post('masjid') == 1 ? 1 : 0,
+            'taman_bermain'    => $this->input->post('taman_bermain') == 1 ? 1 : 0,
+            'area_ruko'        => $this->input->post('area_ruko') == 1 ? 1 : 0,
+            'kolam_renang'     => $this->input->post('kolam_renang') == 1 ? 1 : 0,
+            'one_gate'         => $this->input->post('onegate') == 1 ? 1 : 0,
+            'security'         => $this->input->post('security') == 1 ? 1 : 0,
+            'cctv'             => $this->input->post('cctv') == 1 ? 1 : 0,
+        );
+
+        $data_agency = [
+            'id_agency'   => $this->input->post('agent')
+        ];
+
+        // Update data properti
+        $result = $this->Properti_model->update_properti($id_properti, $data_properti);
+        $result_detail = $this->Properti_model->update_detail($id_properti, $data_detail);
+        $result_fasilitas = $this->Properti_model->update_fasilitas($id_properti, $data_fasilitas);
+
+        if ($result ) {
+            echo json_encode(['message' => 'Data properti berhasil diupdate']);
+        } else {
+            echo json_encode(['message' => 'Gagal mengupdate data properti'], 500);
+        }
     }
 
 }

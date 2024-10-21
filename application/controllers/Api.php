@@ -151,6 +151,8 @@ class Api extends REST_Controller
             properti.id_properti,
             properti.judul_properti,
             properti.alamat,
+            properti.jenis_penawaran,
+            properti.area_terdekat,
             agency.nama_agent,
             agency.no_tlp,
             agency.foto_profil,
@@ -160,12 +162,16 @@ class Api extends REST_Controller
             detail_properti.luas_bangunan,
             detail_properti.luas_tanah,
             detail_properti.harga,
-            detail_properti.satuan
+            detail_properti.satuan,
+            type_properti.nama_type,
+            wilayah_kota.nama_kota
         ');
         $this->db->from('reels');
         $this->db->join('properti', 'properti.id_properti = reels.id_properti', 'left');
+        $this->db->join('wilayah_kota', 'wilayah_kota.id_kota = properti.id_kota', 'left');
         $this->db->join('detail_properti', 'detail_properti.id_properti = properti.id_properti', 'left');
         $this->db->join('listing', 'listing.id_properti = properti.id_properti', 'left');
+        $this->db->join('type_properti', 'type_properti.id_type = properti.id_type', 'left');
         $this->db->join('agency', 'agency.id_agency = listing.id_agency', 'left');
 
         if ($id) {

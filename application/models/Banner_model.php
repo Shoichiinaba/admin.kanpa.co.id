@@ -66,4 +66,5 @@ class Banner_model extends CI_Model
         $this->db->where('id_banner', $id_banner);
         return $this->db->delete('banner');
     }
+
 }

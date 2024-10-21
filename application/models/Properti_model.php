@@ -112,10 +112,14 @@ class Properti_model extends CI_Model
     {
         $this->db->select('
             properti.id_properti,
+            properti.id_status,
+            properti.id_kota,
+            properti.id_type,
             properti.judul_properti,
             properti.alamat,
             properti.lokasi,
             properti.area_terdekat,
+            properti.jenis_penawaran,
             properti.viewer,
             properti.dibuat,
             detail_properti.jml_kamar,
@@ -146,13 +150,15 @@ class Properti_model extends CI_Model
             type_properti.icon,
             wilayah_kota.nama_kota,
             wilayah_kota.provinsi_id,
+            agency.id_agency,
             agency.nama_agent,
             agency.email,
             agency.position,
             agency.no_tlp,
             agency.foto_profil,
             agency.alamat as agency_alamat,
-            filter_kota.icon as icon_filter
+            filter_kota.icon as icon_filter,
+            status_properti.status as status_properti
         ');
         $this->db->from('properti');
         $this->db->join('detail_properti', 'detail_properti.id_properti = properti.id_properti', 'left');
@@ -163,6 +169,7 @@ class Properti_model extends CI_Model
         $this->db->join('listing', 'listing.id_properti = properti.id_properti', 'left');
         $this->db->join('agency', 'agency.id_agency = listing.id_agency', 'left');
         $this->db->join('filter_kota', 'filter_kota.id_kota = properti.id_kota', 'left');
+        $this->db->join('status_properti', 'status_properti.id_status = properti.id_status', 'left');
         $this->db->where('properti.id_properti', $id_properti);
         $this->db->order_by('properti.id_properti', 'DESC');
         $this->db->group_by('properti.id_properti');
@@ -205,5 +212,57 @@ class Properti_model extends CI_Model
         $this->db->where('id_promo', $id_promo);
         $this->db->update('promo', $data);
     }
+
+    public function simpan_gambar($file_name, $id_properti) {
+        $data = [
+            'gambar' => $file_name,
+            'id_properti' => $id_properti
+        ];
+
+        $this->db->insert('gambar_properti', $data);
+    }
+
+    public function get_gambar($id_properti)
+    {
+        $this->db->select('gambar');
+        $this->db->from('gambar_properti');
+        $this->db->where('id_properti', $id_properti);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return [];
+        }
+    }
+
+    public function get_gambar_by_nama($id_properti, $gambar) {
+        $this->db->where('id_properti', $id_properti);
+        $this->db->where('gambar', $gambar);
+        $query = $this->db->get('gambar_properti');
+        return $query->row();
+    }
+
+    public function hapus_gambar($id_properti, $gambar) {
+        $this->db->where('id_properti', $id_properti);
+        $this->db->where('gambar', $gambar);
+        return $this->db->delete('gambar_properti');
+    }
+
+    public function update_properti($id_properti, $data_properti) {
+        $this->db->where('id_properti', $id_properti);
+        return $this->db->update('properti', $data_properti);
+    }
+
+    public function update_detail($id_properti, $data_detail) {
+        $this->db->where('id_properti', $id_properti);
+        return $this->db->update('detail_properti', $data_detail);
+    }
+
+    public function update_fasilitas($id_properti, $data_fasilitas) {
+        $this->db->where('id_properti', $id_properti);
+        return $this->db->update('fasilitas_properti', $data_fasilitas);
+    }
+
 
 }

@@ -3,14 +3,15 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel3">Ubah Reels</h5>
+                <h5 class="modal-title" id="exampleModalLabel3">Ubah Banner</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body pt-2">
                 <div class="container mt-2">
                     <form id="edit-banner-form" enctype="multipart/form-data">
                         <div class="row">
-                            <div class="input-wrapper col-6 proper">
+                            <!-- Tambahkan id untuk properti -->
+                            <div class="input-wrapper col-4 proper" id="input-properti" style="display: none;">
                                 <input class="form-control" list="datalistbanner" id="ubah-idprop" name="judul_properti"
                                     placeholder="Ketik nama properti...">
                                 <label for="ubah-idprop" class="label-in">Pilih Properti</label>
@@ -24,7 +25,9 @@
                                 <input type="hidden" name="id_properti" id="edit-id-properti">
                                 <input type="hidden" name="id_banner" id="id-banner">
                             </div>
-                            <div class="input-wrapper col-4">
+
+                            <!-- Tambahkan id untuk penawaran -->
+                            <div class="input-wrapper col-4" id="input-penawaran" style="display: none;">
                                 <input class="form-control" list="data-penawaran" id="edit-penawaran" name="penawaran"
                                     placeholder="Pilih jenis Penawaran..." />
                                 <label for="penawaran" class="label-in">Pilih Penawaran</label>
@@ -33,9 +36,10 @@
                                     <option value="Disewa"></option>
                                 </datalist>
                             </div>
-                            <div class="input-wrapper col-6">
-                                <input class="form-control" list="type-banner" id="edit-type" name="type_banner"
-                                    placeholder="Pilih Type Banner..." />
+
+                            <!-- Pilih Type -->
+                            <div class="input-wrapper col-12" id="input-type">
+                                <input class="form-control" list="type-banner" id="edit-type" name="type_banner" />
                                 <label for="type_banners" class="label-in">Pilih Type</label>
                                 <datalist id="type-banner">
                                     <option value="Full"></option>
@@ -46,6 +50,7 @@
                                     <option value="All Properti"></option>
                                 </datalist>
                             </div>
+
                             <div class="input-wrapper col-12 mt-3">
                                 <div class="alert alert-primary col-12 mb-0" role="alert">Upload Banner
                                     <div id="banner-preview" class="position-relative">
@@ -73,73 +78,6 @@
 </div>
 
 <!-- modal tambah banner -->
-<!-- <div class="modal fade" id="add-banner" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel3">Tambah Banner</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body pt-2">
-                <div class="container mt-2">
-                    <form id="upload-banner" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="input-wrapper col-4">
-                                <input class="form-control" list="type-banner" id="type-banner-input" name="type_banner"
-                                    placeholder="Pilih Type Banner..." />
-                                <label for="type_banner" class="label-in">Pilih Type</label>
-                                <datalist id="type-banner">
-                                    <option value="Full"></option>
-                                    <option value="Split"></option>
-                                    <option value="KPR"></option>
-                                    <option value="Properti Dijual"></option>
-                                    <option value="Properti Disewa"></option>
-                                    <option value="All Properti"></option>
-                                </datalist>
-                            </div>
-                            <div class="input-wrapper col-4">
-                                <input class="form-control" list="data-penawaran" id="edit-penawaran" name="penawaran"
-                                    placeholder="Pilih jenis Penawaran..." />
-                                <label for="penawaran" class="label-in">Pilih Penawaran</label>
-                                <datalist id="data-penawaran">
-                                    <option value="Dijual"></option>
-                                    <option value="Disewa"></option>
-                                </datalist>
-                            </div>
-                            <div class="input-wrapper col-4 proper">
-                                <input class="form-control" list="datalistOptions" id="exampleDataList"
-                                    name="judul_properti" placeholder="Ketik nama properti...">
-                                <label for="exampleDataList" class="label-in">Pilih Properti</label>
-                                <datalist id="datalistOptions">
-                                    <?php foreach ($prop_select as $prop) : ?>
-                                    <option data-id="<?php echo $prop->id_properti; ?>"
-                                        value="<?php echo $prop->judul_properti; ?> (<?php echo $prop->luas_tanah; ?>/<?php echo $prop->luas_bangunan; ?>)">
-                                    </option>
-                                    <?php endforeach; ?>
-                                </datalist>
-                                <input type="hidden" name="id_properti" id="id-properti">
-                            </div>
-                            <div class="input-wrapper col-12 mt-4">
-                                <div class="alert alert-info " role="alert">Upload Banner
-                                    <div id="dropzone" class="dropzone mt-2"></div>
-                                    <div id="responseMessage" class="mt-3"></div>
-                                </div>
-                            </div>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="submitBanner" class="btn btn-primary rounded-3">
-                    <span id="loadingIcon" class="spinner-border spinner-border-sm d-none" role="status"
-                        aria-hidden="true"></span>
-                    <span id="loadingText" class="d-none">Menyimpan...</span>
-                    <span id="submitText">Simpan</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 <div class="modal fade" id="add-banner" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -206,8 +144,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 <script>
@@ -635,7 +571,42 @@ $(document).on('click', '.btn-delete', function() {
     });
 });
 
+
 $(document).ready(function() {
+    // code javascript untuk edit banner mengatur show hide inputan
+
+    // Event listener untuk modal saat dibuka
+    $('#edit-banner').on('shown.bs.modal', function() {
+        let typeBannerValue = $('#edit-type').val();
+
+        if (typeBannerValue === "Full") {
+            $('#input-properti').show();
+            $('#input-penawaran').show();
+            $('#input-type').removeClass('col-12').addClass('col-4');
+        } else {
+            $('#input-properti').hide();
+            $('#input-penawaran').hide();
+            $('#input-type').removeClass('col-4').addClass('col-12');
+        }
+    });
+
+    // Event listener ketika ada perubahan di input type banner
+    $('#edit-type').on('input change', function() {
+        let typeBannerValue = $(this).val();
+
+        if (typeBannerValue === "Full") {
+            $('#input-properti').show();
+            $('#input-penawaran').show();
+            $('#input-type').removeClass('col-12').addClass('col-4');
+        } else {
+            $('#input-properti').hide();
+            $('#input-penawaran').hide();
+            $('#input-type').removeClass('col-4').addClass('col-12');
+        }
+    });
+    $('#input-properti').hide();
+    $('#input-penawaran').hide();
+
     $('#ubah-idprop').on('input', function() {
         var inputVal = $(this).val();
         var selectedOption = $('#datalistbanner option').filter(function() {
@@ -648,19 +619,20 @@ $(document).ready(function() {
 
         }
     });
+
     // Menangani klik tombol Edit
     $(document).on('click', '.btn-edit', function() {
         var id_banner = $(this).data('id_banner');
         var id_properti = $(this).data('id_properti');
         var judul_properti = $(this).data('judul');
         var type_banner = $(this).data('type_banner');
-        // var penawaran = $(this).data('penawaran');
+        var penawaran = $(this).data('penawaran');
         var foto = $(this).data('foto');
 
         $('#id-banner').val(id_banner);
         $('#edit-id-properti').val(id_properti);
         $('#ubah-idprop').val(judul_properti);
-        // $('#edit-penawaran').val(penawaran);
+        $('#edit-penawaran').val(penawaran);
         $('#edit-type').val(type_banner);
 
         // Hapus foto sebelumnya
@@ -686,7 +658,6 @@ $(document).ready(function() {
     // Menangani perubahan pada input file
     $('#upload-banner').on('change', function() {
         var fileName = $(this).val().split('\\').pop();
-        // console.log("File uploaded: " + fileName);
 
         // Mengupdate preview jika file dipilih
         if (this.files && this.files[0]) {

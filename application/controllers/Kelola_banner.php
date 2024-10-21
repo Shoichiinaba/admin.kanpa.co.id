@@ -98,7 +98,7 @@ class Kelola_banner extends AUTH_Controller
                 $output .= '<i class="bx bx-trash"></i>';
                 $output .= '</button>';
                 $output .= '<button type="button" class="btn btn-sm btn-success btn-edit ubah-data rounded-3 ms-2" data-bs-toggle="modal" data-bs-target="#edit-banner"
-                                data-id_banner="' . $ban->id_banner . '" data-id_properti="' . $ban->id_properti . '" data-type_banner="' . $ban->type_banner . '"
+                                data-id_banner="' . $ban->id_banner . '" data-id_properti="' . $ban->id_properti . '" data-penawaran="' . $ban->jenis_penawaran . '" data-type_banner="' . $ban->type_banner . '"
                                 data-judul="' . $ban->judul_properti . '" data-foto="' . $ban->foto_banner . '">
                                 <i class="bx bx-message-rounded-edit"></i>
                             </button>';
@@ -205,7 +205,7 @@ class Kelola_banner extends AUTH_Controller
         $data = array(
             'id_properti' => $this->input->post('id_properti'),
             'type_banner' => $this->input->post('type_banner'),
-            // 'jenis_penawaran' => $this->input->post('penawaran'),
+            'jenis_penawaran' => $this->input->post('penawaran'),
             'created' => date('Y-m-d H:i:s')
         );
 
