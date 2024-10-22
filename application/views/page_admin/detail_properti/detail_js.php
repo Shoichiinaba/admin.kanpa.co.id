@@ -784,7 +784,7 @@
                 }
             });
 
-            // Code untuk menyimpan gambar ke server
+            // Code untuk menyimpan gambar ke server dengan spinner di dalam tombol
             $(document).on('click', '#btnSimpanGambar', function() {
                 var formData = new FormData();
                 var files = $('#uploadGambar')[0].files;
@@ -795,6 +795,10 @@
                         formData.append('gambar[]', files[i]);
                     }
                     formData.append('id_properti', idProperti);
+
+                    $('#btnSimpanGambar').prop('disabled', true).html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...'
+                    );
 
                     $.ajax({
                         url: '<?= base_url("Properti/upload_gambar") ?>',
@@ -810,6 +814,10 @@
                         },
                         error: function(xhr, status, error) {
                             alert('Gagal mengunggah gambar: ' + error);
+                        },
+                        complete: function() {
+                            $('#btnSimpanGambar').prop('disabled', false).html(
+                                'Simpan Gambar');
                         }
                     });
                 } else {
@@ -924,5 +932,10 @@
                 }
             });
         });
+
+        $('#ubah-properti').on('hidden.bs.modal', function() {
+            location.reload();
+        });
+
     });
     </script>

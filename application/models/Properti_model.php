@@ -31,9 +31,11 @@ class Properti_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('agency');
+        $this->db->where('position !=', 'Admin');
         $query = $this->db->get();
         return $query->result();
     }
+
 
     public function getKotaByProvinsiId($provinsi_id)
     {
@@ -137,7 +139,7 @@ class Properti_model extends CI_Model
             detail_properti.harga,
             detail_properti.satuan,
             detail_properti.deskripsi,
-            GROUP_CONCAT(DISTINCT TRIM(gambar_properti.gambar) SEPARATOR ",") as gambar,
+            GROUP_CONCAT(DISTINCT TRIM(gambar_properti.gambar) ORDER BY gambar_properti.id_gambar ASC SEPARATOR ",") as gambar,
             fasilitas_properti.jalan,
             fasilitas_properti.masjid,
             fasilitas_properti.taman_bermain,
@@ -171,7 +173,6 @@ class Properti_model extends CI_Model
         $this->db->join('filter_kota', 'filter_kota.id_kota = properti.id_kota', 'left');
         $this->db->join('status_properti', 'status_properti.id_status = properti.id_status', 'left');
         $this->db->where('properti.id_properti', $id_properti);
-        $this->db->order_by('properti.id_properti', 'DESC');
         $this->db->group_by('properti.id_properti');
 
         $query = $this->db->get();
