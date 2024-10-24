@@ -442,6 +442,7 @@ class Properti extends AUTH_Controller
     public function updateProperti() {
 
         $id_properti = $this->input->post('id_properti');
+        $id_kota = $this->input->post('id_kota');
 
         // Mengambil nilai data properti
         $data_properti = array(
@@ -490,10 +491,17 @@ class Properti extends AUTH_Controller
             'id_agency'   => $this->input->post('agent')
         ];
 
+        $data_map = [
+            'code' => $id_kota,
+            'color' => '#104C98'
+        ];
+
+
         // Update data properti
         $result = $this->Properti_model->update_properti($id_properti, $data_properti);
         $result_detail = $this->Properti_model->update_detail($id_properti, $data_detail);
         $result_fasilitas = $this->Properti_model->update_fasilitas($id_properti, $data_fasilitas);
+        $result_map = $this->Properti_model->ubah_warna($data_map);
 
         if ($result ) {
             echo json_encode(['message' => 'Data properti berhasil diupdate']);

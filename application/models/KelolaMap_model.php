@@ -169,22 +169,4 @@ class KelolaMAp_model extends CI_Model
         $this->db->from('wilayah_kota');
         return $this->db->count_all_results();
     }
-
-
-    public function map_get()
-    {
-        $id = $this->input->get('id');
-
-        // Inisialisasi curl untuk mengambil data dari API
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://localhost:8080/admin.kanpa.co.id/Api/map_get?id=$id");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        // Decode JSON response
-        $response_data = json_decode($response, true);
-
-        return $response_data; // Mengembalikan array
-    }
 }
