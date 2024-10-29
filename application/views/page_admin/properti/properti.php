@@ -328,6 +328,119 @@ textarea:focus+label {
     background-color: white !important;
     color: #1A44B2 !important;
 }
+
+<link rel="stylesheet"href="<?= base_url('assets'); ?>/css/detail-prop.css"/><style>#gambar-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#gambar-preview img {
+    max-width: 148px;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+    position: relative;
+}
+
+.gambar-item {
+    position: relative;
+}
+
+.hapus-gambar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(229 0 0 / 62%);
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    display: none;
+    cursor: pointer;
+}
+
+.gambar-item:hover .hapus-gambar {
+    display: block;
+}
+
+.tambah-foto-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 231px;
+    height: 83px;
+    border: 2px dashed #1a44b2;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 235px;
+    margin-top: 4px;
+}
+
+.tambah-foto-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    color: #555;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tambah-foto-btn i {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.tambah-foto-wrapper:hover {
+    background-color: #e9e9e9;
+}
+
+#meta-preview img {
+    width: 55%;
+    height: auto;
+    display: block;
+    margin: 5px 0;
+    border-radius: 5px;
+
+}
+
+#meta-preview {
+    position: relative;
+    width: 100%;
+    max-width: 285px;
+    height: auto;
+    overflow: hidden;
+    margin: -3px auto -19px auto;
+    text-align: center;
+}
+
+#meta-preview:hover #delete-icon {
+    display: block;
+    /* Tampilkan ikon saat di-hover */
+}
+
+#meta-preview img {
+    width: 70%;
+    height: auto;
+    display: block;
+    margin: 5px auto;
+    border-radius: 5px;
+}
+
+.delete-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 20px;
+    color: red;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    padding: 2px 6px;
+}
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">

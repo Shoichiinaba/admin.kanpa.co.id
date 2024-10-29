@@ -231,6 +231,22 @@
                             <div id="dropzone" class="dropzone mt-2"></div>
                             <div id="responseMessage" class="mt-3"></div>
                         </div>
+                        <!-- upload meta properti -->
+                        <div class="alert alert-success col-12 pb-4" role="alert">
+                            Upload Meta Properti
+                            <div id="meta-preview" class="position-relative">
+                                <img id="preview-image" src="#" alt="Preview" style="display: none;">
+                                <span id="delete-icon" class="delete-icon" style="display: none;">&#10006;</span>
+                            </div>
+                            <div class="tambah-foto-wrapper">
+                                <button id="btnTambahFoto" class="tambah-foto-btn" type="button">
+                                    <i class="bx bx-image-add"></i> Tambahkan Foto
+                                </button>
+                                <input type="file" name="meta_properti" id="meta_properti" accept="image/*"
+                                    class="d-none">
+                            </div>
+                        </div>
+
                     </form>
                 </div>
             </div>
@@ -356,6 +372,39 @@ var myDropzone = new Dropzone("#dropzone", {
             $(file.previewElement).addClass('dz-preview');
         });
 
+        // Menangani upload meta properti
+        var metaImages = [];
+
+        // Menambahkan foto meta
+        $(document).on('click', '#btnTambahFoto', function() {
+            $('#meta_properti').click();
+        });
+
+        // Menampilkan preview gambar dan menyembunyikan tombol tambah
+        $('#meta_properti').on('change', function(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#preview-image').attr('src', e.target.result).show();
+                    $('.tambah-foto-wrapper').hide();
+                    $('#delete-icon').show();
+
+                    metaImages = [files[0]];
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+
+        // Hapus preview gambar saat ikon hapus diklik
+        $('#delete-icon').on('click', function() {
+            $('#preview-image').hide();
+            $('#delete-icon').hide();
+            $('.tambah-foto-wrapper').show();
+            $('#meta_properti').val('');
+            metaImages = []; // Kosongkan array metaImages
+        });
+
         $("#submitProperti").click(function(e) {
             e.preventDefault();
 
@@ -381,6 +430,11 @@ var myDropzone = new Dropzone("#dropzone", {
             }
 
             var formData = new FormData($("#jualPropertiForm")[0]);
+
+            // Tambahkan file gambar meta ke dalam FormData
+            if (metaImages.length > 0) {
+                formData.append('meta_properti', metaImages[0]); // Tambahkan file pertama saja
+            }
 
             // Mengirim parameter form data ke Dropzone
             myDropzone.options.params = {
@@ -417,6 +471,13 @@ var myDropzone = new Dropzone("#dropzone", {
                 area_terdekat: area_terdekat
             };
 
+            myDropzone.on("sending", function(file, xhr, formData) {
+                for (let i = 0; i < metaImages.length; i++) {
+                    formData.append('meta_properti', metaImages[
+                        i]);
+                }
+            });
+
             $("#submitText").addClass('d-none');
             $("#loadingIcon").removeClass('d-none');
             $("#loadingText").removeClass('d-none');
@@ -439,8 +500,8 @@ var myDropzone = new Dropzone("#dropzone", {
                     showConfirmButton: false
                 });
 
-                window.location.href =
-                    "<?php echo base_url('Properti'); ?>";
+                // window.location.href =
+                //     "<?php echo base_url('Properti'); ?>";
 
                 $('#add-properti').modal('hide');
                 myDropzone.removeAllFiles();
@@ -467,6 +528,7 @@ var myDropzone = new Dropzone("#dropzone", {
     }
 });
 
+//////////////////////////////////////////////////
 $(".type-button").click(function() {
     var selectedType = $(this).data('type');
     var selectedId = $(this).data('id');
@@ -490,7 +552,6 @@ $(".type-button").click(function() {
         $("#kota-list").removeClass("col-12").addClass("col-6");
     }
 });
-
 
 $('#data-agent').on('input', function() {
     var inputValagen = $(this).val();

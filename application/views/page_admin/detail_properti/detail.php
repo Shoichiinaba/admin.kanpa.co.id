@@ -66,6 +66,29 @@
 .tambah-foto-wrapper:hover {
     background-color: #e9e9e9;
 }
+
+#meta-preview {
+    width: 39%;
+    max-width: 285px;
+    height: auto;
+    overflow: hidden;
+    margin-top: -8px;
+    margin-left: 225px;
+    margin-bottom: 18px;
+}
+
+#meta-preview img {
+    width: 70%;
+    height: auto;
+    display: block;
+}
+
+#change-foto {
+    position: fixed;
+    bottom: 121px;
+    left: 343px;
+    margin: 0px;
+}
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -419,13 +442,13 @@
                         data-taman_bermain="<?= $d->taman_bermain; ?>" data-ruko="<?= $d->area_ruko; ?>"
                         data-kolam_renang="<?= $d->kolam_renang; ?>" data-gate="<?= $d->one_gate; ?>"
                         data-cctv="<?= $d->cctv; ?>" data-security="<?= $d->security; ?>"
+                        data-foto_meta="<?= $d->foto_meta; ?>"
                         data-gambar="<?= htmlspecialchars($gambarString, ENT_QUOTES, 'UTF-8'); ?>">Ubah Content
                     </button>
                 </div>
             </div>
             <?php endforeach; ?>
             <?php endif; ?>
-
         </div>
     </div>
 </div>

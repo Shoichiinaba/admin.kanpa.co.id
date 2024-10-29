@@ -275,9 +275,15 @@
                             Upload Gambar Properti
                             <div class="row">
                                 <div id="gambar-preview" class="d-flex gap-2 mt-1 mb-1 col-12" style="flex-wrap: wrap;">
-
                                 </div>
                             </div>
+                        </div>
+                        <div class="alert alert-success col-12 pb-4" role="alert"> Upload Meta Properti
+                            <div id="meta-preview" class="position-relative">
+                            </div>
+                            <button type="button" id="change-foto" class="btn btn-sm btn-primary rounded-3">Ganti
+                                Meta</button>
+                            <input type="file" class="d-none" id="upload-meta" name="foto_meta">
                         </div>
                     </form>
                 </div>
@@ -567,6 +573,8 @@
 
         // Menangani klik tombol Edit
         $(document).on('click', '.btn-edit', function() {
+            var baseUrl = "<?php echo base_url(); ?>";
+
             var id_properti = $(this).data('id');
             var id_provinsi = $(this).data('id_provinsi');
             var type_properti = $(this).data('type');
@@ -607,6 +615,7 @@
             var security = $(this).data('security');
             var cctv = $(this).data('cctv');
             var gambar = $(this).data('gambar');
+            var meta = $(this).data('foto_meta');
 
             if (area) {
                 var areas = area.split(',');
@@ -862,7 +871,6 @@
             $('#data-agent').val(agent);
             $('#id-agency').val(id_agent);
 
-
             $('#jalan').val(jalan);
             $('#taman_bermain').prop('checked', taman_bermain === 1);
             $('#area_ruko').prop('checked', area_ruko === 1);
@@ -871,11 +879,53 @@
             $('#security').prop('checked', security === 1);
             $('#cctv').prop('checked', cctv === 1);
             $('#masjid').prop('checked', masjid === 1);
+
+            // Hapus foto sebelumnya
+            $('#meta-preview').empty();
+            // $('#change-foto').addClass('d-none');
+
+            // Tampilkan foto jika ada
+            if (meta) {
+                var fotoPath = `${baseUrl}upload/meta_properti/${meta}`;
+                var imgElement = `<img src="${fotoPath}" alt="Foto Meta" class="img-fluid" />`;
+                $('#meta-preview').append(imgElement);
+                $('#change-foto').removeClass('d-none');
+            }
+
+        });
+
+        $('#change-foto').on('click', function() {
+            $('#upload-meta').trigger('click');
+        });
+
+        $('#upload-meta').on('change', function(event) {
+            var input = event.target;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#meta-preview').empty();
+                    var imgElement =
+                        `<img src="${e.target.result}" alt="Foto Meta" class="img-fluid" />`;
+                    $('#meta-preview').append(imgElement);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         });
 
         // Simpan perubahan
         $('#submitEditProperti').on('click', function() {
             const formData = new FormData($('#edit-properti-form')[0]);
+
+            var files = $('#upload-meta')[0] ? $('#upload-meta')[0].files :
+                undefined; // Ganti 'upload_meta' dengan 'upload-meta'
+            if (files && files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('foto_meta[]', files[i]); // Tambahkan file ke formData
+                }
+            } else {
+                alert('Silakan pilih file untuk diupload.');
+                return; // Hentikan eksekusi jika tidak ada file
+            }
 
             // Atur nilai checkbox menjadi 1 jika checked, 0 jika tidak
             formData.set('taman_bermain', $('#taman_bermain').is(':checked') ? 1 : 0);

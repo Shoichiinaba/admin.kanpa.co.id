@@ -418,6 +418,8 @@ class Api extends REST_Controller
         }
     }
 
+    // article api
+
     function article_get()
     {
         if (!$this->verify_api_key()) return;
@@ -463,6 +465,36 @@ class Api extends REST_Controller
             $this->response(array('status' => 'success'), 201);
         } else {
             $this->response(array('status' => 'fail'), 502);
+        }
+    }
+
+    // meta properti APi
+    function meta_get()
+    {
+        if (!$this->verify_api_key()) return;
+
+        $id = $this->get('id_meta');
+
+        $this->db->select('
+            meta_properti.id_meta,
+            meta_properti.id_properti,
+            meta_properti.foto_meta,
+            properti.judul_properti
+        ');
+        $this->db->from('meta_properti');
+        $this->db->join('properti', 'properti.id_properti = meta_properti.id_properti', 'left');
+
+        if ($id) {
+            $this->db->where('meta_properti.id_meta', $id);
+        }
+
+        $this->db->order_by("meta_properti.id_meta", "DESC");
+        $meta = $this->db->get()->result();
+
+        if ($meta) {
+            $this->response($meta, 200);
+        } else {
+            $this->response(array('status' => 'not found'), 404);
         }
     }
 

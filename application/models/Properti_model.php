@@ -160,8 +160,10 @@ class Properti_model extends CI_Model
             agency.foto_profil,
             agency.alamat as agency_alamat,
             filter_kota.icon as icon_filter,
-            status_properti.status as status_properti
+            status_properti.status as status_properti,
+            meta_properti.foto_meta
         ');
+
         $this->db->from('properti');
         $this->db->join('detail_properti', 'detail_properti.id_properti = properti.id_properti', 'left');
         $this->db->join('gambar_properti', 'gambar_properti.id_properti = properti.id_properti', 'left');
@@ -172,6 +174,7 @@ class Properti_model extends CI_Model
         $this->db->join('agency', 'agency.id_agency = listing.id_agency', 'left');
         $this->db->join('filter_kota', 'filter_kota.id_kota = properti.id_kota', 'left');
         $this->db->join('status_properti', 'status_properti.id_status = properti.id_status', 'left');
+        $this->db->join('meta_properti', 'meta_properti.id_properti = properti.id_properti', 'left');
         $this->db->where('properti.id_properti', $id_properti);
         $this->db->group_by('properti.id_properti');
 
@@ -265,5 +268,27 @@ class Properti_model extends CI_Model
         return $this->db->update('fasilitas_properti', $data_fasilitas);
     }
 
+    public function insert_meta_properti($data_meta) {
+        return $this->db->insert('meta_properti', $data_meta);
+    }
+    public function upload_meta_properti($data_meta_gambar) {
+        return $this->db->insert('meta_properti', $data_meta_gambar);
+    }
+
+    public function update_meta_properti($data_meta, $id_properti) {
+        $this->db->where('id_properti', $id_properti);
+        return $this->db->update('meta_properti', $data_meta);
+    }
+
+    public function get_meta_properti($id_properti) {
+        $this->db->where('id_properti', $id_properti);
+        $query = $this->db->get('meta_properti');
+
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        }
+
+        return null;
+    }
 
 }

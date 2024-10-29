@@ -239,6 +239,7 @@ class Properti extends AUTH_Controller
          }
 
         // Proses file gambar
+
         $files = $_FILES['gambar_properti'];
         $error_occurred = false;
 
@@ -278,6 +279,81 @@ class Properti extends AUTH_Controller
             return;
         }
 
+        // Proses file meta properti
+        log_message('debug', 'FILES: ' . print_r($_FILES, true));
+        log_message('debug', 'POST: ' . print_r($_POST, true));
+
+        if (!isset($_FILES['meta_properti'])) {
+            log_message('error', 'meta_properti tidak diatur dalam $_FILES');
+            echo json_encode(['status' => 'error', 'message' => 'Tidak ada file yang diunggah untuk meta_properti.']);
+            return;
+        }
+
+
+        if (!isset($_FILES['meta_properti'])) {
+            log_message('error', 'meta_properti tidak diatur dalam $_FILES');
+            echo json_encode(['status' => 'error', 'message' => 'Tidak ada file yang diunggah untuk meta_properti.']);
+            return;
+        }
+
+        $meta_file = $_FILES['meta_properti'];
+
+        // Cek jika file meta_properti tidak kosong
+        if (!empty($meta_file['name'])) {
+            $_FILES['file_meta']['name'] = $meta_file['name'];
+            $_FILES['file_meta']['type'] = $meta_file['type'];
+            $_FILES['file_meta']['tmp_name'] = $meta_file['tmp_name'];
+            $_FILES['file_meta']['error'] = $meta_file['error'];
+            $_FILES['file_meta']['size'] = $meta_file['size'];
+
+            // Inisialisasi ulang konfigurasi upload untuk file meta
+            $this->upload->initialize($this->set_upload_options_meta('./upload/meta_properti'));
+
+            if ($this->upload->do_upload('file_meta')) {
+                $uploaded_data = $this->upload->data();
+                if (isset($uploaded_data['file_name'])) {
+                    // Konfigurasi untuk meresize gambar
+                    $resize_config = [
+                        'image_library' => 'gd2',
+                        'source_image' => $uploaded_data['full_path'], // Path gambar yang diupload
+                        'maintain_ratio' => true,
+                        'width' => 140,
+                        'height' => 140,
+                    ];
+
+                    // Muat library image_lib
+                    $this->load->library('image_lib', $resize_config);
+
+                    // Resize gambar
+                    if (!$this->image_lib->resize()) {
+                        // Jika terjadi error saat resize
+                        log_message('error', 'Resize error: ' . $this->image_lib->display_errors());
+                        echo json_encode(['status' => 'error', 'message' => 'Gambar berhasil diunggah tetapi gagal melakukan resize.']);
+                        return;
+                    }
+
+                    // Insert data meta properti ke database
+                    $data_meta_gambar = [
+                        'id_properti' => $id_properti,
+                        'foto_meta' => $uploaded_data['file_name']
+                    ];
+                    $this->Properti_model->insert_meta_properti($data_meta_gambar);
+                } else {
+                    log_message('error', 'File uploaded but no file name returned: ' . print_r($uploaded_data, true));
+                    echo json_encode(['status' => 'error', 'message' => 'Terjadi kesalahan saat mengunggah gambar meta.']);
+                    return;
+                }
+            } else {
+                $meta_error = $this->upload->display_errors();
+                log_message('error', 'Meta upload error: ' . $meta_error);
+                echo json_encode(['status' => 'error', 'message' => 'Terjadi kesalahan saat mengunggah gambar meta.']);
+                return;
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Tidak ada file yang dipilih untuk meta properti.']);
+            return;
+        }
+
         echo json_encode(['status' => 'success', 'message' => 'Properti berhasil disimpan.']);
     }
 
@@ -291,6 +367,20 @@ class Properti extends AUTH_Controller
         ];
         return $config;
     }
+
+    private function set_upload_options_meta() {
+        $config = [
+            'upload_path' => './upload/meta_properti',
+            'allowed_types' => 'jpg|jpeg|png',
+            'max_size' => 2048,
+            'overwrite' => false,
+            'encrypt_name' => true,
+        ];
+
+        return $config;
+    }
+
+
 
     public function detail()
     {
@@ -471,7 +561,7 @@ class Properti extends AUTH_Controller
             'ruang_makan'      => $this->input->post('ruang_makan'),
             'balkon'           => $this->input->post('balkon'),
             'harga'            => $this->input->post('harga'),
-            'satuan'     => $this->input->post('satuan'),
+            'satuan'           => $this->input->post('satuan'),
             'deskripsi'        => $this->input->post('deskripsi'),
         );
 
@@ -503,11 +593,80 @@ class Properti extends AUTH_Controller
         $result_fasilitas = $this->Properti_model->update_fasilitas($id_properti, $data_fasilitas);
         $result_map = $this->Properti_model->ubah_warna($data_map);
 
-        if ($result ) {
+        if (!empty($_FILES['foto_meta']['name'][0])) {
+            $upload_path = './upload/meta_properti/';
+            if (!is_dir($upload_path)) {
+                mkdir($upload_path, 0755, true);
+            }
+
+            $this->load->library('upload');
+            $config['upload_path'] = $upload_path;
+            $config['allowed_types'] = 'jpg|jpeg|png|gif';
+            $config['max_size'] = 2048;
+
+            $old_meta = $this->Properti_model->get_meta_properti($id_properti);
+            $old_file_path = $old_meta ? $old_meta->foto_meta : null;
+
+            $files = $_FILES;
+            $count = count($_FILES['foto_meta']['name']);
+            for ($i = 0; $i < $count; $i++) {
+                $_FILES['foto_meta']['name'] = $files['foto_meta']['name'][$i];
+                $_FILES['foto_meta']['type'] = $files['foto_meta']['type'][$i];
+                $_FILES['foto_meta']['tmp_name'] = $files['foto_meta']['tmp_name'][$i];
+                $_FILES['foto_meta']['error'] = $files['foto_meta']['error'][$i];
+                $_FILES['foto_meta']['size'] = $files['foto_meta']['size'][$i];
+
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('foto_meta')) {
+                    $uploadData = $this->upload->data();
+
+                    $ext = pathinfo($uploadData['file_name'], PATHINFO_EXTENSION);
+                    $encrypted_name = md5(time() . $uploadData['file_name']) . '.' . $ext;
+                    $new_file_path = $upload_path . $encrypted_name;
+
+                    if (rename($uploadData['full_path'], $new_file_path)) {
+                        if ($old_file_path && file_exists($upload_path . $old_file_path)) {
+                            unlink($upload_path . $old_file_path);
+                        }
+
+                        $config_resize['image_library'] = 'gd2';
+                        $config_resize['source_image'] = $new_file_path;
+                        $config_resize['maintain_ratio'] = true;
+                        $config_resize['width'] = 140;
+                        $config_resize['height'] = 140;
+
+                        $this->load->library('image_lib', $config_resize);
+                        if (!$this->image_lib->resize()) {
+                            log_message('error', 'Gagal mengubah ukuran gambar: ' . $this->image_lib->display_errors());
+                        }
+
+                        $this->image_lib->clear();
+
+                        if ($old_meta) {
+                            $data_meta = array('foto_meta' => $encrypted_name);
+                            $this->Properti_model->update_meta_properti($data_meta, $id_properti);
+                        } else {
+                            $data_meta = array(
+                                'id_properti' => $id_properti,
+                                'foto_meta'   => $encrypted_name
+                            );
+                            $this->Properti_model->insert_meta_properti($data_meta);
+                        }
+                    } else {
+                        log_message('error', 'Gagal mengganti nama file: ' . $uploadData['full_path']);
+                    }
+                } else {
+                    log_message('error', 'Upload gagal: ' . $this->upload->display_errors());
+                }
+            }
+        }
+
+        if ($result) {
             echo json_encode(['message' => 'Data properti berhasil diupdate']);
         } else {
             echo json_encode(['message' => 'Gagal mengupdate data properti'], 500);
         }
+
     }
 
 }
