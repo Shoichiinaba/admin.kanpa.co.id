@@ -500,8 +500,7 @@ var myDropzone = new Dropzone("#dropzone", {
                     showConfirmButton: false
                 });
 
-                // window.location.href =
-                //     "<?php echo base_url('Properti'); ?>";
+                location.reload();
 
                 $('#add-properti').modal('hide');
                 myDropzone.removeAllFiles();

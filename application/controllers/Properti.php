@@ -578,7 +578,7 @@ class Properti extends AUTH_Controller
         );
 
         $data_agency = [
-            'id_agency'   => $this->input->post('agent')
+            'id_agency'   => $this->input->post('id_agency')
         ];
 
         $data_map = [
@@ -591,9 +591,11 @@ class Properti extends AUTH_Controller
         $result = $this->Properti_model->update_properti($id_properti, $data_properti);
         $result_detail = $this->Properti_model->update_detail($id_properti, $data_detail);
         $result_fasilitas = $this->Properti_model->update_fasilitas($id_properti, $data_fasilitas);
+        $result_agent = $this->Properti_model->update_agent($id_properti, $data_agency);
         $result_map = $this->Properti_model->ubah_warna($data_map);
 
         if (!empty($_FILES['foto_meta']['name'][0])) {
+            // Proses upload jika ada gambar yang dipilih
             $upload_path = './upload/meta_properti/';
             if (!is_dir($upload_path)) {
                 mkdir($upload_path, 0755, true);
@@ -603,9 +605,6 @@ class Properti extends AUTH_Controller
             $config['upload_path'] = $upload_path;
             $config['allowed_types'] = 'jpg|jpeg|png|gif';
             $config['max_size'] = 2048;
-
-            $old_meta = $this->Properti_model->get_meta_properti($id_properti);
-            $old_file_path = $old_meta ? $old_meta->foto_meta : null;
 
             $files = $_FILES;
             $count = count($_FILES['foto_meta']['name']);
@@ -629,6 +628,7 @@ class Properti extends AUTH_Controller
                             unlink($upload_path . $old_file_path);
                         }
 
+                        // Resize
                         $config_resize['image_library'] = 'gd2';
                         $config_resize['source_image'] = $new_file_path;
                         $config_resize['maintain_ratio'] = true;
@@ -642,22 +642,20 @@ class Properti extends AUTH_Controller
 
                         $this->image_lib->clear();
 
-                        if ($old_meta) {
-                            $data_meta = array('foto_meta' => $encrypted_name);
-                            $this->Properti_model->update_meta_properti($data_meta, $id_properti);
-                        } else {
-                            $data_meta = array(
-                                'id_properti' => $id_properti,
-                                'foto_meta'   => $encrypted_name
-                            );
-                            $this->Properti_model->insert_meta_properti($data_meta);
-                        }
+                        $data_meta = array('foto_meta' => $encrypted_name);
+                        $this->Properti_model->update_meta_properti($data_meta, $id_properti);
                     } else {
                         log_message('error', 'Gagal mengganti nama file: ' . $uploadData['full_path']);
                     }
                 } else {
                     log_message('error', 'Upload gagal: ' . $this->upload->display_errors());
                 }
+            }
+        } else {
+            // Jika tidak ada gambar baru, simpan gambar lama
+            if ($old_meta) {
+                $data_meta = array('foto_meta' => $old_file_path);
+                $this->Properti_model->update_meta_properti($data_meta, $id_properti);
             }
         }
 

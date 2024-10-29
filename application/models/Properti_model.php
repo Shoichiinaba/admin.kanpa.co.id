@@ -268,9 +268,11 @@ class Properti_model extends CI_Model
         return $this->db->update('fasilitas_properti', $data_fasilitas);
     }
 
-    public function insert_meta_properti($data_meta) {
-        return $this->db->insert('meta_properti', $data_meta);
+    public function update_agent($id_properti, $data_agency) {
+        $this->db->where('id_properti', $id_properti);
+        return $this->db->update('listing', $data_agency);
     }
+
     public function upload_meta_properti($data_meta_gambar) {
         return $this->db->insert('meta_properti', $data_meta_gambar);
     }

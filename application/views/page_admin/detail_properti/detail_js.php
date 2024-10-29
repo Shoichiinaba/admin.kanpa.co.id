@@ -917,14 +917,11 @@
             const formData = new FormData($('#edit-properti-form')[0]);
 
             var files = $('#upload-meta')[0] ? $('#upload-meta')[0].files :
-                undefined; // Ganti 'upload_meta' dengan 'upload-meta'
+                undefined;
             if (files && files.length > 0) {
                 for (let i = 0; i < files.length; i++) {
-                    formData.append('foto_meta[]', files[i]); // Tambahkan file ke formData
+                    formData.append('foto_meta[]', files[i]);
                 }
-            } else {
-                alert('Silakan pilih file untuk diupload.');
-                return; // Hentikan eksekusi jika tidak ada file
             }
 
             // Atur nilai checkbox menjadi 1 jika checked, 0 jika tidak
