@@ -500,7 +500,7 @@ var myDropzone = new Dropzone("#dropzone", {
                     showConfirmButton: false
                 });
 
-                location.reload();
+                reloadBannerData();
 
                 $('#add-properti').modal('hide');
                 myDropzone.removeAllFiles();
@@ -686,6 +686,93 @@ $(document).ready(function() {
         var search = $(this).val();
         start = 0;
         load_data(limit, start, search);
+    });
+});
+
+// Fungsi untuk memuat ulang data
+var baseUrl = "<?php echo base_url(); ?>";
+var limit = 4;
+var start = 0;
+var total_pages = 0;
+
+function reloadBannerData() {
+    var search = $('#search-properti').val();
+
+    $.ajax({
+        url: baseUrl + "Properti/fetch",
+        method: "POST",
+        data: {
+            limit: limit,
+            start: start,
+            search: search
+        },
+        cache: false,
+        success: function(data) {
+            var response = JSON.parse(data);
+            $('#load_data').html('');
+            if (response.data.trim() === '') {
+                $('#load_data_message').html(
+                    '<div class="alert alert-primary alert-dismissible" role="alert">' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                    '<i class="fa fa-folder-open"></i> Data Properti Tidak Ditemukan...</div>'
+                );
+                action = 'active';
+            } else {
+                if (start === 0) {
+                    $('#load_data').html(response.data);
+                } else {
+                    $('#load_data').append(response.data);
+                }
+                $('#load_data_message').html("");
+                action = 'inactive';
+                total_pages = response.total_pages;
+                update_pagination();
+            }
+        }
+    });
+}
+
+// Fungsi untuk memperbarui pagination
+function update_pagination() {
+    if (total_pages === 0) {
+        $('.pagination').html('');
+        return;
+    }
+
+    var paginationHtml =
+        '<li class="page-item prev ' + (start === 0 ? 'disabled' : '') + '">' +
+        '<a class="page-link" href="javascript:void(0);" onclick="changePage(' + Math.max(start - limit, 0) + ');">' +
+        '<i class="tf-icon bx bx-chevrons-left"></i></a></li>';
+
+    for (var i = 1; i <= total_pages; i++) {
+        paginationHtml += '<li class="page-item ' + (i === (start / limit) + 1 ? 'active' : '') + '">' +
+            '<a class="page-link" href="javascript:void(0);" onclick="changePage(' + (i - 1) * limit + ');">' +
+            i + '</a></li>';
+    }
+
+    paginationHtml +=
+        '<li class="page-item next ' + (start >= (total_pages - 1) * limit ? 'disabled' : '') + '">' +
+        '<a class="page-link" href="javascript:void(0);" onclick="changePage(' + Math.min(start + limit, (total_pages -
+            1) * limit) + ');">' +
+        '<i class="tf-icon bx bx-chevrons-right"></i></a></li>';
+
+    $('.pagination').html(paginationHtml);
+}
+
+function changePage(newStart) {
+    if (newStart < 0 || newStart >= total_pages * limit) {
+        return;
+    }
+    start = newStart;
+    reloadBannerData();
+}
+
+$(document).ready(function() {
+    reloadBannerData();
+
+    $('#search-properti').on('input', function() {
+        start = 0;
+        reloadBannerData();
     });
 });
 </script>

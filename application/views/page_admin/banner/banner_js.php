@@ -199,7 +199,6 @@ $(document).ready(function() {
 });
 
 
-
 $('#exampleDataList').on('input', function() {
     var inputVal = $(this).val();
     var selectedOption = $('#datalistOptions option').filter(function() {
