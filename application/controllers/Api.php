@@ -87,12 +87,15 @@ class Api extends REST_Controller
             agency.foto_profil,
             agency.alamat as agency_alamat,
             filter_kota.icon as icon_filter,
-            promo.nama_promo
+            promo.nama_promo,
+            meta_properti.foto_meta
         ');
+
         $this->db->from('properti');
         $this->db->join('status_properti', 'status_properti.id_status = properti.id_status');
         $this->db->join('detail_properti', 'detail_properti.id_properti = properti.id_properti', 'left');
         $this->db->join('gambar_properti', 'gambar_properti.id_properti = properti.id_properti', 'left');
+        $this->db->join('meta_properti', 'meta_properti.id_properti = properti.id_properti', 'left');
         $this->db->join('fasilitas_properti', 'fasilitas_properti.id_properti = properti.id_properti', 'left');
         $this->db->join('type_properti', 'type_properti.id_type = properti.id_type', 'left');
         $this->db->join('wilayah_kota', 'wilayah_kota.id_kota = properti.id_kota', 'left');

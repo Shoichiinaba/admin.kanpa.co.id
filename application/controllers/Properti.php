@@ -10,6 +10,7 @@ class Properti extends AUTH_Controller
         parent::__construct();
         $this->load->model('Properti_model');
         $this->load->library('upload');
+        $this->load->helper('encryption_helper');
     }
 
     public function index()
@@ -52,7 +53,7 @@ class Properti extends AUTH_Controller
                                             <div class="ribbon ribbon-top-left"><span>' . $prop->jenis_penawaran . '</span></div>
                                                 <img class="card-img card-img-left" src="' . base_url('upload/gambar_properti/' . $prop->gambar) . '"
                                                     alt="Card image" />
-                                                <a href="' . base_url('Properti/detail/' . $prop->id_properti) . '" class="btn btn-primary btn-view"><i class="menu-icon tf-icons bx bx-bot"></i>Lihat</a>
+                                                <a href="' . base_url('Properti/detail/' . encode_id($prop->id_properti)) . '" class="btn btn-primary btn-view"><i class="menu-icon tf-icons bx bx-bot"></i>Lihat</a>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="desk pt-2 pb-1">
@@ -380,11 +381,11 @@ class Properti extends AUTH_Controller
         return $config;
     }
 
-
-
     public function detail()
     {
-        $id_properti = $this->uri->segment(3);
+        $encoded_id_properti = $this->uri->segment(3);
+        $id_properti = decode_id($encoded_id_properti);
+
         $data['tittle']         = 'kanpa.co.id | Detail Properti';
         $data['userdata']       = $this->userdata;
         $data['status']         = $this->Properti_model->get_status_select();
