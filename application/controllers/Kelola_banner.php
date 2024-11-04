@@ -16,6 +16,7 @@ class Kelola_banner extends AUTH_Controller
         $data['tittle']          = 'kanpa.co.id | Banner';
         $data['userdata']        = $this->userdata;
         $data['prop_select']     = $this->Banner_model->get_properti_select();
+        $data['filter_type']     = $this->Banner_model->get_filter_type();
         $data['content']         = 'page_admin/banner/banner';
         $data['script']          = 'page_admin/banner/banner_js';
         $this->load->view($this->template, $data);
@@ -24,12 +25,16 @@ class Kelola_banner extends AUTH_Controller
     public function fetch_banner()
     {
         $output = '';
-        $limit = $this->input->post('limit');
-        $start = $this->input->post('start');
-        $search = $this->input->post('search');
+        $limit       = $this->input->post('limit');
+        $start       = $this->input->post('start');
+        $search      = $this->input->post('search');
+        $filter_type = $this->input->post('bannerType');
 
-        $data = $this->Banner_model->get_banner($limit, $start, $search);
-        $total_data = $this->Banner_model->count_banner($search);
+        // var_dump($filter_type);
+        // exit;
+
+        $data = $this->Banner_model->get_banner($limit, $start, $search, $filter_type);
+        $total_data = $this->Banner_model->count_banner($search, $filter_type);
         $total_pages = ceil($total_data / $limit);
 
         $output = '';

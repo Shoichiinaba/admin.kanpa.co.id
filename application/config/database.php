@@ -12,8 +12,8 @@ $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	// Offline development
-	// 'username' => 'root',
-	// 'password' => '',
+	'username' => 'root',
+	'password' => '',
 
 	 // online development (productions)
 	 'username' => 'kina3126_mp_kanpa',

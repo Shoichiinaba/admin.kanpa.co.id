@@ -198,6 +198,18 @@ $(document).ready(function() {
     $('#type-banner-input').trigger('input');
 });
 
+// update filter
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.filter-banner').forEach(function(filterItem) {
+        filterItem.addEventListener('click', function() {
+            let selectedCategory = this.textContent.trim();
+
+            document.getElementById('filterButton').innerHTML =
+                `<i class='bx bx-filter'></i> ${selectedCategory}`;
+
+        });
+    });
+});
 
 $('#exampleDataList').on('input', function() {
     var inputVal = $(this).val();
@@ -336,13 +348,13 @@ $(document).ready(function() {
 
 });
 
-
 // kode list data banner
 $(document).ready(function() {
     var limit = 4;
     var start = 0;
     var action = 'inactive';
     var total_pages = 1;
+    var bannerType = '';
 
     function lazzy_loader(limit) {
         var output = '';
@@ -361,14 +373,15 @@ $(document).ready(function() {
 
     lazzy_loader(limit);
 
-    function load_data(limit, start, search = '') {
+    function load_data(limit, start, search = '', bannerType = '') {
         $.ajax({
             url: "<?php echo base_url(); ?>Kelola_banner/fetch_banner",
             method: "POST",
             data: {
                 limit: limit,
                 start: start,
-                search: search
+                search: search,
+                bannerType: bannerType
             },
             cache: false,
             success: function(data) {
@@ -415,17 +428,17 @@ $(document).ready(function() {
         if ($(this).hasClass('prev')) {
             if (start >= limit) {
                 start -= limit;
-                load_data(limit, start, $('#search-banner').val());
+                load_data(limit, start, $('#search-banner').val(), bannerType);
             }
         } else if ($(this).hasClass('next')) {
             if (start + limit < total_pages * limit) {
                 start += limit;
-                load_data(limit, start, $('#search-banner').val());
+                load_data(limit, start, $('#search-banner').val(), bannerType);
             }
         } else {
             var page = parseInt($(this).find('.page-link').text());
             start = (page - 1) * limit;
-            load_data(limit, start, $('#search-banner').val());
+            load_data(limit, start, $('#search-banner').val(), bannerType);
         }
     });
 
@@ -434,7 +447,13 @@ $(document).ready(function() {
     $('#search-banner').on('input', function() {
         var search = $(this).val();
         start = 0;
-        load_data(limit, start, search);
+        load_data(limit, start, search, bannerType);
+    });
+
+    $('.filter-banner').on('click', function() {
+        bannerType = $(this).data('type');
+        start = 0;
+        load_data(limit, start, $('#search-banner').val(), bannerType);
     });
 });
 
@@ -442,6 +461,7 @@ $(document).ready(function() {
 var baseUrl = "<?php echo base_url(); ?>";
 var limit = 4;
 var start = 0;
+var bannerType = '';
 var total_pages = 0;
 
 function reloadBannerData() {
@@ -453,7 +473,8 @@ function reloadBannerData() {
         data: {
             limit: limit,
             start: start,
-            search: search
+            search: search,
+            bannerType: bannerType
         },
         cache: false,
         success: function(data) {

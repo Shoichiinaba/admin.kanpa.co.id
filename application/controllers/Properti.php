@@ -15,14 +15,16 @@ class Properti extends AUTH_Controller
 
     public function index()
     {
-        $data['tittle']         = 'kanpa.co.id | Properti';
-        $data['userdata']       = $this->userdata;
-        $data['type']           = $this->Properti_model->get_type();
-        $data['kota']           = $this->Properti_model->get_kota_select();
-        $data['status']         = $this->Properti_model->get_status_select();
-        $data['agent']          = $this->Properti_model->get_agent_select();
-        $data['content']        = 'page_admin/properti/properti';
-        $data['script']         = 'page_admin/properti/properti_js';
+        $data['tittle']             = 'kanpa.co.id | Properti';
+        $data['userdata']           = $this->userdata;
+        $data['type']               = $this->Properti_model->get_type();
+        $data['type_properti']      = $this->Properti_model->get_filter_type();
+        $data['jenis_penawaran']    = $this->Properti_model->get_penawaran();
+        $data['kota']               = $this->Properti_model->get_kota_select();
+        $data['status']             = $this->Properti_model->get_status_select();
+        $data['agent']              = $this->Properti_model->get_agent_select();
+        $data['content']            = 'page_admin/properti/properti';
+        $data['script']             = 'page_admin/properti/properti_js';
         $this->load->view($this->template, $data);
     }
 
@@ -32,9 +34,11 @@ class Properti extends AUTH_Controller
         $limit = $this->input->post('limit');
         $start = $this->input->post('start');
         $search = $this->input->post('search');
+        $filter_type = $this->input->post('properti_type');
+        $filter_penawaran = $this->input->post('jenis_penawaran');
 
-        $data = $this->Properti_model->get_properti($limit, $start, $search);
-        $total_data = $this->Properti_model->count_properti($search);
+        $data = $this->Properti_model->get_properti($limit, $start, $search, $filter_type,  $filter_penawaran);
+        $total_data = $this->Properti_model->count_properti($search, $filter_type,  $filter_penawaran);
         $total_pages = ceil($total_data / $limit);
 
         $output = '';

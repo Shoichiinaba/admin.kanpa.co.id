@@ -19,6 +19,26 @@ class Properti_model extends CI_Model
         return $query->result();
     }
 
+    function get_filter_type()
+    {
+        $this->db->select('*');
+        $this->db->from('type_properti');
+        $this->db->order_by('id_type', 'ASC');
+        $this->db->group_by('type_properti.nama_type');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function get_penawaran()
+    {
+        $this->db->select('*');
+        $this->db->from('properti');
+        $this->db->order_by('id_properti', 'ASC');
+        $this->db->group_by('properti.jenis_penawaran');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     function get_status_select()
     {
         $this->db->select('*');
@@ -47,7 +67,7 @@ class Properti_model extends CI_Model
         return $query->result();
     }
 
-    public function get_properti($limit, $start, $search = '')
+    public function get_properti($limit, $start, $search = '', $filter_type, $filter_penawaran)
     {
         if ($start < 0) $start = 0;
 
@@ -66,6 +86,14 @@ class Properti_model extends CI_Model
                 $this->db->group_by('properti.id_properti');
             }
 
+            if (!empty($filter_type)) {
+                $this->db->where('properti.id_type', $filter_type);
+            }
+
+            if (!empty($filter_penawaran)) {
+                $this->db->where('properti.jenis_penawaran', $filter_penawaran);
+            }
+
         $this->db->order_by("properti.id_properti", "DESC");
         $this->db->group_by('properti.id_properti');
         $this->db->limit($limit, $start);
@@ -74,13 +102,22 @@ class Properti_model extends CI_Model
         return $query;
     }
 
-    public function count_properti($search = '')
+    public function count_properti($search = '', $filter_type, $filter_penawaran)
     {
         $this->db->select('*');
         $this->db->from('properti');
+
         if (!empty($search)) {
             $this->db->like('judul_properti', $search);
         }
+
+        if (!empty($filter_type)) {
+            $this->db->where('properti.id_type', $filter_type);
+        }
+        if (!empty($filter_penawaran)) {
+            $this->db->where('properti.jenis_penawaran', $filter_penawaran);
+        }
+
         return $this->db->count_all_results();
     }
 

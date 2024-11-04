@@ -88,7 +88,7 @@
 
 .image-pro {
     flex: 0 0 auto;
-    width: 29%;
+    width: 33%;
     margin-left: inherit;
 }
 
@@ -441,6 +441,44 @@ textarea:focus+label {
     border-radius: 50%;
     padding: 2px 6px;
 }
+
+/* Mengatur ukuran lebar dan tinggi search form */
+.custom-search-form {
+    width: 164px;
+    height: 30px;
+}
+
+.custom-search-icon {
+    background-color: #1A44B2;
+    color: #ffffff;
+    border: none;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+}
+
+#search-properti {
+    height: 102%;
+    font-size: 11px;
+    line-height: 25px;
+    padding: 9px;
+    text-align: left;
+}
+
+.custom-filter-button {
+    width: 140px;
+    height: 28px;
+    font-size: 11px;
+    line-height: 25px;
+    padding: 0;
+    text-align: center;
+}
+
+.custom-filter {
+    padding-left: 7px;
+}
 </style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -452,12 +490,66 @@ textarea:focus+label {
         <div>
             <h5 class="mb-0">Daftar Properti</h5>
         </div>
-        <form class="d-flex" style="width: 200px;">
-            <div class="input-group">
-                <span class="input-group-text"><i class="tf-icons bx bx-search"></i></span>
-                <input type="text" id="search-properti" class="form-control" placeholder="Search..." />
+
+        <!-- Search Form and Filter Group -->
+        <div class="d-flex align-items-center">
+            <!-- Search Form -->
+            <form class="d-flex shadow-lg me-0 custom-search-form">
+                <div class="input-group">
+                    <span class="input-group-text custom-search-icon"><i class="tf-icons bx bx-search"></i></span>
+                    <input type="text" id="search-properti" class="form-control" placeholder="Search..." />
+                </div>
+            </form>
+
+            <!-- Filter Button -->
+            <div class="custom-filter">
+                <div class="btn-group">
+                    <button type="button" id="filterButton" class="btn btn-warning dropdown-toggle custom-filter-button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class='bx bx-filter'></i> Filter Kategori
+                    </button>
+                    <ul class="dropdown-menu">
+                        <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center filter-type"
+                            data-type="">
+                            <i class="bx bx-chevron-right scaleX-n1-rtl"></i> Filter Kategori
+                        </a>
+                        <?php foreach ($type_properti as $data) : ?>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center filter-type"
+                                data-type="<?= $data->id_type; ?>">
+                                <i class="bx bx-chevron-right scaleX-n1-rtl"></i> <?= $data->nama_type; ?>
+                            </a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
             </div>
-        </form>
+
+            <div class="custom-filter">
+                <div class="btn-group">
+                    <button type="button" id="button-penawaran"
+                        class="btn btn-primary dropdown-toggle custom-filter-button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class='bx bx-filter'></i> Filter Penawaran
+                    </button>
+                    <ul class="dropdown-menu">
+                        <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center filter-penawaran"
+                            data-penawaran="">
+                            <i class="bx bx-chevron-right scaleX-n1-rtl"></i> Semua Penawaran
+                        </a>
+                        <?php foreach ($jenis_penawaran as $data) : ?>
+                        <li>
+                            <a href="javascript:void(0);"
+                                class="dropdown-item d-flex align-items-center filter-penawaran"
+                                data-penawaran="<?= $data->jenis_penawaran; ?>">
+                                <i class="bx bx-chevron-right scaleX-n1-rtl"></i> <?= $data->jenis_penawaran; ?>
+                            </a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row mb-0" id="load_data">
     </div>

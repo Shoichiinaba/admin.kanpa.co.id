@@ -14,11 +14,21 @@ class Banner_model extends CI_Model
         return $query->result();
     }
 
+    function get_filter_type()
+    {
+        $this->db->select('*');
+        $this->db->from('banner');
+        $this->db->order_by('type_banner', 'ASC');
+        $this->db->group_by('banner.type_banner');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     public function insert_banner($data) {
         $this->db->insert('banner', $data);
     }
 
-    public function get_banner($limit, $start, $search = '') {
+    public function get_banner($limit, $start, $search = '', $filter_type) {
         if ($start < 0) $start = 0;
 
         $this->db->select('banner.*, properti.*, detail_properti.*, banner.jenis_penawaran as penawaran');
@@ -31,6 +41,10 @@ class Banner_model extends CI_Model
             $this->db->group_by('properti.id_properti');
         }
 
+        if (!empty($filter_type)) {
+            $this->db->where('banner.type_banner', $filter_type);
+        }
+
         $this->db->order_by("banner.id_banner", "ASC");
         $this->db->limit($limit, $start);
         $query = $this->db->get();
@@ -38,14 +52,18 @@ class Banner_model extends CI_Model
         return $query;
     }
 
-
-    public function count_banner($search = '')
+    public function count_banner($search = '', $filter_type)
     {
         $this->db->select('*');
         $this->db->from('banner');
         $this->db->join('properti', 'properti.id_properti = banner.id_properti', 'left');
+
         if (!empty($search)) {
             $this->db->like('properti.judul_properti', $search);
+        }
+
+        if ($filter_type !== '') {
+            $this->db->where('banner.type_banner', $filter_type);
         }
         return $this->db->count_all_results();
     }

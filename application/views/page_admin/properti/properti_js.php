@@ -581,6 +581,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// update filter
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.filter-type').forEach(function(filterItem) {
+        filterItem.addEventListener('click', function() {
+            let selectedCategory = this.textContent.trim();
+
+            document.getElementById('filterButton').innerHTML =
+                `<i class='bx bx-filter'></i> ${selectedCategory}`;
+
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.filter-penawaran').forEach(function(filterItem) {
+        filterItem.addEventListener('click', function() {
+            let selectedCategory = this.textContent.trim();
+
+            document.getElementById('button-penawaran').innerHTML =
+                `<i class='bx bx-filter'></i> ${selectedCategory}`;
+
+        });
+    });
+});
+
 // kode list data properti
 $(document).ready(function() {
     var limit = 3;
@@ -588,6 +613,8 @@ $(document).ready(function() {
     var action = 'inactive';
     var total_pages = 1;
     var total_data = 0;
+    var properti_type = '';
+    var jenis_penawaran = '';
 
     function lazzy_loader(limit) {
         var output = '';
@@ -606,14 +633,16 @@ $(document).ready(function() {
 
     lazzy_loader(limit);
 
-    function load_data(limit, start, search = '') {
+    function load_data(limit, start, search = '', properti_type, jenis_penawaran) {
         $.ajax({
             url: "<?php echo base_url(); ?>Properti/fetch",
             method: "POST",
             data: {
                 limit: limit,
                 start: start,
-                search: search
+                search: search,
+                properti_type: properti_type,
+                jenis_penawaran: jenis_penawaran
             },
             cache: false,
             success: function(data) {
@@ -666,17 +695,17 @@ $(document).ready(function() {
         if ($(this).hasClass('prev')) {
             if (start >= limit) {
                 start -= limit;
-                load_data(limit, start, $('#search-properti').val());
+                load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
             }
         } else if ($(this).hasClass('next')) {
             if (start + limit < total_pages * limit) {
                 start += limit;
-                load_data(limit, start, $('#search-properti').val());
+                load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
             }
         } else {
             var page = parseInt($(this).find('.page-link').text());
             start = (page - 1) * limit;
-            load_data(limit, start, $('#search-properti').val());
+            load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
         }
     });
 
@@ -685,7 +714,19 @@ $(document).ready(function() {
     $('#search-properti').on('input', function() {
         var search = $(this).val();
         start = 0;
-        load_data(limit, start, search);
+        load_data(limit, start, search, properti_type, jenis_penawaran);
+    });
+
+    $('.filter-type').on('click', function() {
+        properti_type = $(this).data('type');
+        start = 0;
+        load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
+    });
+
+    $('.filter-penawaran').on('click', function() {
+        jenis_penawaran = $(this).data('penawaran');
+        start = 0;
+        load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
     });
 });
 
