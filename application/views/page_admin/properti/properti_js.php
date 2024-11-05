@@ -654,6 +654,8 @@ $(document).ready(function() {
                         '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
                         '<i class="fa fa-folder-open"></i> Data Properti Tidak Ditemukan...</div>'
                     );
+                    $('.pagination, .filter-type, .filter-penawaran').hide(); // Sembunyikan elemen
+                    $('.custom-badge').text(0); // Tampilkan 0 jika data tidak ditemukan
                     action = 'active';
                 } else {
                     if (start === 0) {
@@ -662,11 +664,12 @@ $(document).ready(function() {
                         $('#load_data').append(response.data);
                     }
                     $('#load_data_message').html("");
-                    action = 'inactive';
+                    $('.pagination, .filter-type, .filter-penawaran').show(); // Tampilkan elemen
                     total_pages = response.total_pages;
                     total_data = response.total_data;
                     update_pagination();
                     update_total_data();
+                    action = 'inactive';
                 }
             }
         });
@@ -765,6 +768,51 @@ function reloadBannerData() {
                     $('#load_data').append(response.data);
                 }
                 $('#load_data_message').html("");
+                action = 'inactive';
+                total_pages = response.total_pages;
+                update_pagination();
+            }
+        }
+    });
+}
+
+// Fungsi untuk memuat ulang data
+var baseUrl = "<?php echo base_url(); ?>";
+var limit = 4;
+var start = 0;
+var total_pages = 0;
+
+function reloadBannerData() {
+    var search = $('#search-properti').val();
+
+    $.ajax({
+        url: baseUrl + "Properti/fetch",
+        method: "POST",
+        data: {
+            limit: limit,
+            start: start,
+            search: search
+        },
+        cache: false,
+        success: function(data) {
+            var response = JSON.parse(data);
+            $('#load_data').html('');
+            if (response.data.trim() === '') {
+                $('#load_data_message').html(
+                    '<div class="alert alert-primary alert-dismissible" role="alert">' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                    '<i class="fa fa-folder-open"></i> Data Properti Tidak Ditemukan...</div>'
+                );
+                $('.custom-badge').text(0);
+                action = 'active';
+            } else {
+                if (start === 0) {
+                    $('#load_data').html(response.data);
+                } else {
+                    $('#load_data').append(response.data);
+                }
+                $('#load_data_message').html("");
+                $('.custom-badge').text(response.total_data);
                 action = 'inactive';
                 total_pages = response.total_pages;
                 update_pagination();
