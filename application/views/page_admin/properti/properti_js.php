@@ -615,6 +615,7 @@ $(document).ready(function() {
     var total_data = 0;
     var properti_type = '';
     var jenis_penawaran = '';
+    var filter_agency = '';
 
     function lazzy_loader(limit) {
         var output = '';
@@ -633,7 +634,7 @@ $(document).ready(function() {
 
     lazzy_loader(limit);
 
-    function load_data(limit, start, search = '', properti_type, jenis_penawaran) {
+    function load_data(limit, start, search = '', properti_type, jenis_penawaran, filter_agency) {
         $.ajax({
             url: "<?php echo base_url(); ?>Properti/fetch",
             method: "POST",
@@ -642,7 +643,8 @@ $(document).ready(function() {
                 start: start,
                 search: search,
                 properti_type: properti_type,
-                jenis_penawaran: jenis_penawaran
+                jenis_penawaran: jenis_penawaran,
+                filter_agency: filter_agency
             },
             cache: false,
             success: function(data) {
@@ -654,8 +656,8 @@ $(document).ready(function() {
                         '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
                         '<i class="fa fa-folder-open"></i> Data Properti Tidak Ditemukan...</div>'
                     );
-                    $('.pagination, .filter-type, .filter-penawaran').hide(); // Sembunyikan elemen
-                    $('.custom-badge').text(0); // Tampilkan 0 jika data tidak ditemukan
+                    $('.pagination, .filter-type, .filter-penawaran,  .filter-agency').hide();
+                    $('.custom-badge').text(0);
                     action = 'active';
                 } else {
                     if (start === 0) {
@@ -664,7 +666,7 @@ $(document).ready(function() {
                         $('#load_data').append(response.data);
                     }
                     $('#load_data_message').html("");
-                    $('.pagination, .filter-type, .filter-penawaran').show(); // Tampilkan elemen
+                    $('.pagination, .filter-type, .filter-penawaran').show();
                     total_pages = response.total_pages;
                     total_data = response.total_data;
                     update_pagination();
@@ -698,17 +700,20 @@ $(document).ready(function() {
         if ($(this).hasClass('prev')) {
             if (start >= limit) {
                 start -= limit;
-                load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
+                load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran,
+                    filter_agency);
             }
         } else if ($(this).hasClass('next')) {
             if (start + limit < total_pages * limit) {
                 start += limit;
-                load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
+                load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran,
+                    filter_agency);
             }
         } else {
             var page = parseInt($(this).find('.page-link').text());
             start = (page - 1) * limit;
-            load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
+            load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran,
+                filter_agency);
         }
     });
 
@@ -717,64 +722,30 @@ $(document).ready(function() {
     $('#search-properti').on('input', function() {
         var search = $(this).val();
         start = 0;
-        load_data(limit, start, search, properti_type, jenis_penawaran);
+        load_data(limit, start, search, properti_type, jenis_penawaran, filter_agency);
     });
 
     $('.filter-type').on('click', function() {
         properti_type = $(this).data('type');
         start = 0;
-        load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
+        load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran,
+            filter_agency);
     });
 
     $('.filter-penawaran').on('click', function() {
         jenis_penawaran = $(this).data('penawaran');
         start = 0;
-        load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran);
+        load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran,
+            filter_agency);
+    });
+
+    $('.filter-agency').on('click', function() {
+        filter_agency = $(this).data('agency');
+        start = 0;
+        load_data(limit, start, $('#search-properti').val(), properti_type, jenis_penawaran,
+            filter_agency);
     });
 });
-
-// Fungsi untuk memuat ulang data
-var baseUrl = "<?php echo base_url(); ?>";
-var limit = 4;
-var start = 0;
-var total_pages = 0;
-
-function reloadBannerData() {
-    var search = $('#search-properti').val();
-
-    $.ajax({
-        url: baseUrl + "Properti/fetch",
-        method: "POST",
-        data: {
-            limit: limit,
-            start: start,
-            search: search
-        },
-        cache: false,
-        success: function(data) {
-            var response = JSON.parse(data);
-            $('#load_data').html('');
-            if (response.data.trim() === '') {
-                $('#load_data_message').html(
-                    '<div class="alert alert-primary alert-dismissible" role="alert">' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                    '<i class="fa fa-folder-open"></i> Data Properti Tidak Ditemukan...</div>'
-                );
-                action = 'active';
-            } else {
-                if (start === 0) {
-                    $('#load_data').html(response.data);
-                } else {
-                    $('#load_data').append(response.data);
-                }
-                $('#load_data_message').html("");
-                action = 'inactive';
-                total_pages = response.total_pages;
-                update_pagination();
-            }
-        }
-    });
-}
 
 // Fungsi untuk memuat ulang data
 var baseUrl = "<?php echo base_url(); ?>";

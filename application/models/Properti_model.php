@@ -39,6 +39,17 @@ class Properti_model extends CI_Model
         return $query->result();
     }
 
+    function get_agency()
+    {
+        $this->db->select('listing.*, agency.nama_agent');
+        $this->db->from('listing');
+        $this->db->join('agency', 'agency.id_agency = listing.id_agency', 'inner');
+        $this->db->order_by('id_listing', 'ASC');
+        $this->db->group_by('listing.id_agency');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     function get_status_select()
     {
         $this->db->select('*');
@@ -67,7 +78,7 @@ class Properti_model extends CI_Model
         return $query->result();
     }
 
-    public function get_properti($limit, $start, $search = '', $filter_type, $filter_penawaran)
+    public function get_properti($limit, $start, $search = '', $filter_type, $filter_penawaran, $filter_agent)
     {
         if ($start < 0) $start = 0;
 
@@ -78,8 +89,9 @@ class Properti_model extends CI_Model
         $this->db->join('fasilitas_properti', 'fasilitas_properti.id_properti = properti.id_properti', 'left');
         $this->db->join('type_properti', 'type_properti.id_type = properti.id_type', 'left');
         $this->db->join('wilayah_kota', 'wilayah_kota.id_kota = properti.id_kota', 'left');
-        $this->db->join('listing', 'listing.id_properti = properti.id_properti', 'left');
-        $this->db->join('agency', 'agency.id_agency = listing.id_agency', 'left');
+
+        $this->db->join('listing', 'listing.id_properti = properti.id_properti', 'inner');
+        $this->db->join('agency', 'agency.id_agency = listing.id_agency', 'inner');
 
             if (!empty($search)) {
                 $this->db->like('properti.judul_properti', $search);
@@ -94,6 +106,10 @@ class Properti_model extends CI_Model
                 $this->db->where('properti.jenis_penawaran', $filter_penawaran);
             }
 
+            if (!empty($filter_agent)) {
+                $this->db->where('listing.id_agency', $filter_agent);
+            }
+
         $this->db->order_by("properti.id_properti", "DESC");
         $this->db->group_by('properti.id_properti');
         $this->db->limit($limit, $start);
@@ -102,10 +118,12 @@ class Properti_model extends CI_Model
         return $query;
     }
 
-    public function count_properti($search = '', $filter_type, $filter_penawaran)
+    public function count_properti($search = '', $filter_type, $filter_penawaran, $filter_agent)
     {
         $this->db->select('*');
         $this->db->from('properti');
+        $this->db->join('listing', 'listing.id_properti = properti.id_properti', 'inner');
+        $this->db->join('agency', 'agency.id_agency = listing.id_agency', 'inner');
 
         if (!empty($search)) {
             $this->db->like('judul_properti', $search);
@@ -114,8 +132,13 @@ class Properti_model extends CI_Model
         if (!empty($filter_type)) {
             $this->db->where('properti.id_type', $filter_type);
         }
+
         if (!empty($filter_penawaran)) {
             $this->db->where('properti.jenis_penawaran', $filter_penawaran);
+        }
+
+        if (!empty($filter_agent)) {
+            $this->db->where('listing.id_agency', $filter_agent);
         }
 
         return $this->db->count_all_results();

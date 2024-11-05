@@ -20,6 +20,7 @@ class Properti extends AUTH_Controller
         $data['type']               = $this->Properti_model->get_type();
         $data['type_properti']      = $this->Properti_model->get_filter_type();
         $data['jenis_penawaran']    = $this->Properti_model->get_penawaran();
+        $data['filter_agency']      = $this->Properti_model->get_agency();
         $data['kota']               = $this->Properti_model->get_kota_select();
         $data['status']             = $this->Properti_model->get_status_select();
         $data['agent']              = $this->Properti_model->get_agent_select();
@@ -31,14 +32,15 @@ class Properti extends AUTH_Controller
     public function fetch()
     {
         $output = '';
-        $limit = $this->input->post('limit');
-        $start = $this->input->post('start');
-        $search = $this->input->post('search');
-        $filter_type = $this->input->post('properti_type');
-        $filter_penawaran = $this->input->post('jenis_penawaran');
+        $limit              = $this->input->post('limit');
+        $start              = $this->input->post('start');
+        $search             = $this->input->post('search');
+        $filter_type        = $this->input->post('properti_type');
+        $filter_penawaran   = $this->input->post('jenis_penawaran');
+        $filter_agent       = $this->input->post('filter_agency');
 
-        $data = $this->Properti_model->get_properti($limit, $start, $search, $filter_type,  $filter_penawaran);
-        $total_data = $this->Properti_model->count_properti($search, $filter_type,  $filter_penawaran);
+        $data = $this->Properti_model->get_properti($limit, $start, $search, $filter_type,  $filter_penawaran, $filter_agent);
+        $total_data = $this->Properti_model->count_properti($search, $filter_type,  $filter_penawaran, $filter_agent);
         $total_pages = ceil($total_data / $limit);
 
         $output = '';

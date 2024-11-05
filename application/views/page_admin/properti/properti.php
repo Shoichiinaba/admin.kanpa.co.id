@@ -549,6 +549,30 @@ textarea:focus+label {
                     </ul>
                 </div>
             </div>
+
+            <div class="custom-filter">
+                <div class="btn-group">
+                    <button type="button" id="button-penawaran"
+                        class="btn btn-success dropdown-toggle custom-filter-button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class='bx bx-filter'></i> Filter Agency
+                    </button>
+                    <ul class="dropdown-menu">
+                        <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center filter-agency"
+                            data-agency="">
+                            <i class="bx bx-chevron-right scaleX-n1-rtl"></i> Semua agency
+                        </a>
+                        <?php foreach ($filter_agency as $data) : ?>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center filter-agency"
+                                data-agency="<?= $data->id_agency; ?>">
+                                <i class="bx bx-chevron-right scaleX-n1-rtl"></i> <?= $data->nama_agent; ?>
+                            </a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row mb-0" id="load_data">
